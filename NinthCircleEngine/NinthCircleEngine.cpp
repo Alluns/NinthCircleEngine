@@ -77,8 +77,10 @@ int main(int argc, char* argv[])
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-
         glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
+        
+        int state = glfwGetKey(window, GLFW_KEY_SPACE);
+        glm::vec3 roofColor = (state == GLFW_PRESS) ? glm::vec3(0.443, 0.345, 0.886) : glm::vec3(0.118, 0.153, 0.18);
         
         // Grass
         drawRectangle({{0, -1, 0}, {0, 0, 0}, {2, 0.5, 1}}, {0.043, 0.91, 0.506});
@@ -87,8 +89,8 @@ int main(int argc, char* argv[])
         drawRectangle({{0, -0.25, 0}, {0, 0, 0}, {0.5, 0.25, 1}}, {1, 0.247, 0.204});
         
         // Roof
-        drawTriangle({{0.25, 0.25, 0}, {0, 0, 0}, {0.25, 0.25, 1}}, {0.118, 0.153, 0.18});
-        drawTriangle({{-0.25, 0.25, 0}, {glm::pi<float>()/2, 0, 0}, {0.25, 0.25, 1}}, {0.118, 0.153, 0.18});
+        drawTriangle({{0.25, 0.25, 0}, {0, 0, 0}, {0.25, 0.25, 1}}, roofColor);
+        drawTriangle({{-0.25, 0.25, 0}, {glm::pi<float>()/2, 0, 0}, {0.25, 0.25, 1}}, roofColor);
 
         // Windows
         drawRectangle({{-0.25, -0.1875, 0}, {glm::pi<float>()/4, 0, 0}, {0.0625f, 0.0625f, 1}}, {0.294, 0.812, 0.98});
