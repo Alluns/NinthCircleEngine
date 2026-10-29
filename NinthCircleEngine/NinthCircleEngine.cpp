@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Shader.h"
 #include "Transform.h"
 
 void drawTriangle(Transform transform, glm::vec3 color);
@@ -11,32 +13,6 @@ const float triangleBuffer[] = {-1, 1, 0,
                                 -1, -1, 0,
                                  1, -1, 0};
 
-const char *vertexShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "uniform vec3 aOffset;\n"
-    "uniform vec3 aRotation;\n"
-    "uniform vec3 aScale;\n"
-    "uniform vec3 aColor;\n"
-    "out vec4 vertexColor;\n"
-    "void main()\n"
-    "{\n"
-    "   vec3 scalePos = aPos * aScale;\n"
-    "   vec3 rotPos = vec3(scalePos.x * cos(aRotation.x) - scalePos.y * sin(aRotation.x), scalePos.y * cos(aRotation.x) + scalePos.x * sin(aRotation.x), 1.0f);\n"
-    "   gl_Position = vec4(rotPos + aOffset, 1.0);\n"
-    "   vertexColor = vec4(aColor, 1.0);\n"
-    "}\0";
-
-const char *fragmentShaderSource = "#version 330 core\n"
-    "in vec4 vertexColor;\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vertexColor;\n"
-    "}\0";
-
-unsigned int vertexShader;
-unsigned int fragmentShader;
-unsigned int shaderProgram;
 unsigned int VBO;
 unsigned int VAO;
 
@@ -62,40 +38,7 @@ int main(int argc, char* argv[])
         return -1;
     }
     
-    // PREPARE SHADER STUFF
-    //   VERTEX SHADER
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    
-    int result;
-    char Log[512];
-    
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &result);
-
-    if (!result)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, Log);
-        std::cout << "Failed to compile vertex shader \n" << Log << '\n';
-    }
-    
-    //   FRAGMENT SHADER
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    
-    //   SHADER PROGRAM
-    shaderProgram = glCreateProgram();
-    
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    
-    glLinkProgram(shaderProgram);
-    
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-    
-    //   VBO AND STUFF
+    //Prepare shader stuff
     glGenBuffers(1, &VBO);
     
     glGenVertexArrays(1, &VAO);
@@ -107,14 +50,29 @@ int main(int argc, char* argv[])
     
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    
+    Shader* simpleShader = new Shader;
+    
+    simpleShader->Initialize("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
+    
+    simpleShader->Use();
+    
+    aColorLocation = glGetUniformLocation(simpleShader->aShaderProgram, "aColor");
+    aOffsetLocation = glGetUniformLocation(simpleShader->aShaderProgram, "aOffset");
+    aRotationLocation = glGetUniformLocation(simpleShader->aShaderProgram, "aRotation");
+    aScaleLocation = glGetUniformLocation(simpleShader->aShaderProgram, "aScale");
     // FINISHED PREPARING SHADER STUFF
     
-    
-    aColorLocation = glGetUniformLocation(shaderProgram, "aColor");
-    aOffsetLocation = glGetUniformLocation(shaderProgram, "aOffset");
-    aRotationLocation = glGetUniformLocation(shaderProgram, "aRotation");
-    aScaleLocation = glGetUniformLocation(shaderProgram, "aScale");
-    
+    // glGetErrors
+    while (true)
+    {
+        auto error = glGetError();
+        
+        if (error)
+            std::cout << "glGetError: " << error <<'\n';
+        else
+            break;
+    }
     
     while (!glfwWindowShouldClose(window))
     {
@@ -149,8 +107,6 @@ int main(int argc, char* argv[])
 
 void drawTriangle(Transform transform, glm::vec3 color)
 {    
-    glUseProgram(shaderProgram);
-    
     glUniform3fv(aColorLocation, 1, glm::value_ptr(color));
     glUniform3fv(aOffsetLocation, 1, glm::value_ptr(transform.aPosition));
     glUniform3fv(aRotationLocation, 1, glm::value_ptr(transform.aRotation));

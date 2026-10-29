@@ -167,10 +167,16 @@
   <ItemGroup>
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="NinthCircleEngine.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Transform.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\shaders\simpleShader.frag.glsl" />
+    <Content Include="assets\shaders\simpleShader.vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
