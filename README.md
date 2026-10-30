@@ -26,7 +26,11 @@ Ninth Circle Engine is a game engine developed by myself during the engine speci
 ## Getting Started
 ~~Releases coming soon~~
 
+### Windows
 1. Download the repository to your desired location.
-2. Open the .sln file in an IDE of your choice, preferably one designed for C++ projects.
-3. Build the project.
-4. Enjoy.
+2. Download the latest **pre-compiled binaries** for [GLFW](https://www.glfw.org/download)
+3. Create a folder named 'lib' in the Ninth Circle Engine's dependencies folder.
+4. Copy the glfw3.lib file corresponding to your IDE version into the lib folder.
+5. Open the .sln file in an IDE of your choice, preferably one designed for C++ projects.
+6. Build the project.
+7. Enjoy.
