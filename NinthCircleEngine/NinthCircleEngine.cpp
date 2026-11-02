@@ -5,6 +5,7 @@
 
 #include "Shader.h"
 #include "Transform.h"
+#include "Debugging.h"
 
 void drawTriangle(Transform transform, glm::vec3 color);
 void drawRectangle(Transform transform, glm::vec3 color);
@@ -51,6 +52,8 @@ int main(int argc, char* argv[])
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     
+    glCheckError();
+    
     Shader* simpleShader = new Shader;
     
     simpleShader->Initialize("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
@@ -62,17 +65,6 @@ int main(int argc, char* argv[])
     aRotationLocation = glGetUniformLocation(simpleShader->aShaderProgram, "aRotation");
     aScaleLocation = glGetUniformLocation(simpleShader->aShaderProgram, "aScale");
     // FINISHED PREPARING SHADER STUFF
-    
-    // glGetErrors
-    while (true)
-    {
-        auto error = glGetError();
-        
-        if (error)
-            std::cout << "glGetError: " << error <<'\n';
-        else
-            break;
-    }
     
     while (!glfwWindowShouldClose(window))
     {

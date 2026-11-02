@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+#include "Debugging.h"
+
 class Shader
 {
 private:

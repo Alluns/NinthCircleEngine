@@ -41,6 +41,8 @@ unsigned int Shader::LoadVertexShader(const char* aPath)
         std::cout << "Failed to compile vertex shader \n" << log << '\n';
     }
     
+    glCheckError();
+    
     return vertexShader;
 }
 
@@ -63,6 +65,8 @@ unsigned int Shader::LoadFragmentShader(const char* aPath)
         glGetShaderInfoLog(fragmentShader, 512, NULL, log);
         std::cout << "Failed to compile fragment shader \n" << log << '\n';
     }
+    
+    glCheckError();
     
     return fragmentShader;
 }
@@ -91,9 +95,13 @@ void Shader::Initialize(const char* aVertexPath, const char* aFragmentPath)
     
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+    
+    glCheckError();
 }
 
 void Shader::Use()
 {
     glUseProgram(aShaderProgram);
+    
+    glCheckError();
 }
