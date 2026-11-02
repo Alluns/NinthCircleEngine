@@ -93,6 +93,9 @@ void Shader::Initialize(const char* aVertexPath, const char* aFragmentPath)
         std::cout << "Shader program failed to compile\n" << log << '\n';
     }
     
+    glDetachShader(aShaderProgram, vertexShader);
+    glDetachShader(aShaderProgram, fragmentShader);
+    
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
     
