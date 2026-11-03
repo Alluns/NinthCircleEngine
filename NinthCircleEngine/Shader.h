@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <glm/ext/matrix_float4x4.hpp>
 
 #include "Debugging.h"
 
@@ -15,4 +16,6 @@ public:
     
     void Initialize(const char* aVertexPath, const char* aFragmentPath);
     void Use();
+    
+    void SetMatrix4(const std::string& aUniformName, glm::mat4 aMatrix);
 };

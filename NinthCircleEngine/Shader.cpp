@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 std::string Shader::LoadShader(const char* aPath)
 {
@@ -107,4 +108,9 @@ void Shader::Use()
     glUseProgram(aShaderProgram);
     
     glCheckError();
+}
+
+void Shader::SetMatrix4(const std::string& aUniformName, glm::mat4 aMatrix)
+{
+    glUniformMatrix4fv(glGetUniformLocation(aShaderProgram, aUniformName.c_str()), 1, GL_FALSE, glm::value_ptr(aMatrix));
 }
