@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Cube.h"
+#include "Pyramid.h"
 #include "Shader.h"
 #include "Debugging.h"
 
@@ -35,16 +36,18 @@ int main(int argc, char* argv[])
     simpleShader->Use();
     
     Cube* cube = new Cube;
+    Pyramid* pyramid = new Pyramid;
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glEnable(GL_CULL_FACE);
+    // glEnable(GL_CULL_FACE);
     
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
         
-        cube->Draw(simpleShader);
+        // cube->Draw(simpleShader);
+        pyramid->Draw(simpleShader);
         
         glfwSwapBuffers(window);
         glfwPollEvents();

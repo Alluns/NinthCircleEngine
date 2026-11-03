@@ -251,6 +251,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Debugging.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
