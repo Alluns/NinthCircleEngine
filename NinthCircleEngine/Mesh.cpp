@@ -6,7 +6,7 @@
 
 #include "Debugging.h"
 
-Mesh::Mesh(const std::vector<float>& vertices, const std::vector<int>& indices)
+void Mesh::InitializeMesh(const std::vector<float>& vertices, const std::vector<int>& indices)
 {
     m_indexCount = indices.size();
     
@@ -33,13 +33,10 @@ Mesh::Mesh(const std::vector<float>& vertices, const std::vector<int>& indices)
     
     glCheckError();
     
-    m_transform = glm::translate(m_transform, {0, 0, -10});
-    m_transform = glm::rotate(m_transform, glm::radians(45.0f), glm::vec3(0.5f, 1.0f, 0));
-    m_transform = glm::scale(m_transform, glm::vec3(1.5f, 1.5f, 1.5f));
-    
-    m_view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_view = glm::lookAt(glm::vec3(0.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     
     m_projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+    // m_projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.1f, 100.0f);
 }
 
 Mesh::~Mesh()
@@ -50,7 +47,7 @@ Mesh::~Mesh()
 
 void Mesh::Draw(Shader* aShader)
 {
-    aShader->SetMatrix4("transform", m_transform);
+    aShader->SetMatrix4("transform", m_transform.To4xMatrix());
     aShader->SetMatrix4("view", m_view);
     aShader->SetMatrix4("projection", m_projection);
     

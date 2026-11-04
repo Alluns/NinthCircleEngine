@@ -18,4 +18,5 @@ public:
     void Use();
     
     void SetMatrix4(const std::string& aUniformName, glm::mat4 aMatrix);
+    void SetVec3(const std::string& aUniformName, glm::vec3 aColor);
 };
