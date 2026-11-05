@@ -40,8 +40,6 @@ void Sphere::GenerateSphere(int rings, int slices)
         current_angle = 0.0f;
     }
 
-    std::cout << "Sphere vertex count:" << m_vertices.size() / 3 << std::endl;
-
     //Indices
     unsigned int top_most_index = 0;
     unsigned int bottom_most_index = m_vertices.size() / 3 - 1;
@@ -84,6 +82,4 @@ void Sphere::GenerateSphere(int rings, int slices)
             }
         }
     }
-
-    std::cout << "Sphere triangle count:" << m_indices.size() / 3 << std::endl;
 }
