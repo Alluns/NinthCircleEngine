@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../../Mesh.h"
+#include "../../StaticMesh.h"
 
-class Sphere : public Mesh
+class Sphere : public StaticMesh
 {
 private:
-    const float gr = (1.0f + sqrt(5.0f)) * 0.5f;
+    const float m_goldenRatio = (1.0f + sqrt(5.0f)) / 2.0f;
     const float a = 1.0f;
-    const float b = 1.0f / gr;
+    const float b = 1.0f / m_goldenRatio;
     
     std::vector<float> m_vertices = {
         0, b, -a,
@@ -51,11 +51,6 @@ private:
 public:
     Sphere()
     {
-        InitializeMesh(m_vertices, m_indices);
-    }
-    Sphere(Transform transform)
-    {
-        m_transform = transform;
         InitializeMesh(m_vertices, m_indices);
     }
 };

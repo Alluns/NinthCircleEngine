@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../Mesh.h"
+#include "../../StaticMesh.h"
 
-class Pyramid : public Mesh
+class Pyramid : public StaticMesh
 {
 private:
     std::vector<float> m_vertices = {
@@ -25,11 +25,6 @@ private:
 public:
     Pyramid()
     {
-        InitializeMesh(m_vertices, m_indices);
-    }
-    Pyramid(Transform transform)
-    {
-        m_transform = transform;
         InitializeMesh(m_vertices, m_indices);
     }
 };

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../../Mesh.h"
+#include "../../StaticMesh.h"
 #include "../../Transform.h"
 
-class Cube : public Mesh
+class Cube : public StaticMesh
 {
 private:
     std::vector<float> m_vertices = {
@@ -34,11 +34,6 @@ private:
 public:
     Cube()
     {
-        InitializeMesh(m_vertices, m_indices);
-    }
-    Cube(Transform transform)
-    {
-        m_transform = transform;
         InitializeMesh(m_vertices, m_indices);
     }
 };

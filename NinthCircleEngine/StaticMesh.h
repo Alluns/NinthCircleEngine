@@ -1,0 +1,31 @@
+#pragma once
+#include <vector>
+#include <glm/ext/matrix_float4x4.hpp>
+
+#include "Shader.h"
+#include "Transform.h"
+
+struct Vertex
+{
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec3 uv;
+};
+
+class StaticMesh
+{
+protected:
+    unsigned int m_VBO = 0;
+    unsigned int m_VAO = 0;
+    unsigned int m_EBO = 0;
+    
+private:
+    int m_indexCount = 0;
+    
+public:
+    ~StaticMesh();
+    
+    void InitializeMesh(const std::vector<float>& vertices, const std::vector<int>& indices);
+    
+    void Draw(Shader* aShader, glm::mat4 transMat);
+};

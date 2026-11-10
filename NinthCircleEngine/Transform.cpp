@@ -2,6 +2,13 @@
 
 #include <glm/ext/matrix_transform.hpp>
 
+Transform::Transform()
+{
+    m_position = {0, 0, 0};
+    m_rotation = {0, 0, 0};
+    m_scale    = {1, 1, 1};
+}
+
 Transform::Transform(const glm::vec3 position, const glm::vec3 rotation, const glm::vec3 scale)
 {
     m_position = position;

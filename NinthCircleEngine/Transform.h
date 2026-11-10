@@ -11,6 +11,8 @@ public:
     glm::vec3 m_scale;
     
 public:
+    Transform();
+    
     Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 
     glm::mat4 To4xMatrix();
