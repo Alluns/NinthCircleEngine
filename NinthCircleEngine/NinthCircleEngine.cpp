@@ -5,6 +5,7 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
+#include "Camera.h"
 #include "Shader.h"
 #include "Mesh.h"
 #include "StaticMeshLoader.h"
@@ -28,6 +29,9 @@ int main(int argc, char* argv[])
         return -1;
     }
     
+    // CAMERA
+    Camera* camera = new Camera;
+    
     // SHADERS
     Shader* simpleShader = new Shader;
     simpleShader->Initialize("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
@@ -35,12 +39,9 @@ int main(int argc, char* argv[])
     
     
     // MATRIX STUFF
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
     // glm::mat4 projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.1f, 100.0f);
     
-    simpleShader->SetMatrix4("view", view);
     simpleShader->SetMatrix4("projection", projection);
 
     
@@ -52,7 +53,7 @@ int main(int argc, char* argv[])
     // OBJ_Loader by Bly7: https://github.com/Bly7/OBJ-Loader/
     objl::Loader loader;
     
-    loader.LoadFile("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+    loader.LoadFile("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
     loader.LoadedMeshes[0].Vertices;
 
     for (auto loaded_mesh : loader.LoadedMeshes)
@@ -72,7 +73,7 @@ int main(int argc, char* argv[])
     }
     
     // Custom .obj loader
-    StaticMesh* sm2 = StaticMeshLoader::LoadMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+    StaticMesh* sm2 = StaticMeshLoader::LoadMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
     Mesh* mesh2 = new Mesh({}, sm2, simpleShader);
     
     
@@ -86,17 +87,18 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
 
+        // Camera
+        camera->m_camera_position = {0, 0, 5 + ((sinf(glfwGetTime()) + 1) / 2) * 4};
+        simpleShader->SetMatrix4("view", camera->GetView());
+        
         for (Mesh& mesh : Meshes)
         {
-            mesh.m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 4, cosf(glfwGetTime() * 2.0f) * 4, 0};
+            mesh.m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 2, cosf(glfwGetTime() * 2.0f) * 2, 0};
             mesh.Draw();
         }
         
-        mesh2->m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 4 * -1, cosf(glfwGetTime() * 2.0f) * 4 * -1, 0};
+        mesh2->m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 2 * -1, cosf(glfwGetTime() * 2.0f) * 2 * -1, 0};
         mesh2->Draw();
-        
-        
-        
         
         glfwSwapBuffers(window);
         glfwPollEvents();

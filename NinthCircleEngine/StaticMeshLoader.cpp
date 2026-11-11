@@ -94,7 +94,8 @@ StaticMesh* StaticMeshLoader::LoadMesh(const std::string& path)
                     // if (existing_index != -1)
                     // {
                     //     indices.push_back(existing_index);
-                    // } else
+                    // }
+                    // else
                     // {
                         indices.push_back(vertices.size());
                         vertices.push_back(vertex);

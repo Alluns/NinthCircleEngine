@@ -166,6 +166,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assets\shapes\Sphere.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="Mesh.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -330,6 +331,7 @@
     <ClInclude Include="assets\shapes\Cube.h" />
     <ClInclude Include="assets\shapes\Pyramid.h" />
     <ClInclude Include="assets\shapes\Sphere.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Debugging.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="OBJ-Loader\OBJ_Loader.h" />
