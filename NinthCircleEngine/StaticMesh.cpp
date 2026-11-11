@@ -5,7 +5,7 @@
 
 #include "Debugging.h"
 
-void StaticMesh::InitializeMesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices)
+void StaticMesh::InitializeMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
 {
     m_indexCount = indices.size();
     
@@ -16,13 +16,9 @@ void StaticMesh::InitializeMesh(const std::vector<Vertex>& vertices, const std::
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
     
-    m_EBO = 0;
-    if (!indices.empty())
-    {
-        glGenBuffers(1, &m_EBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * indices.size(), indices.data(), GL_STATIC_DRAW);
-    }
+    glGenBuffers(1, &m_EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), indices.data(), GL_STATIC_DRAW);
     
     // Position
     glEnableVertexAttribArray(0);

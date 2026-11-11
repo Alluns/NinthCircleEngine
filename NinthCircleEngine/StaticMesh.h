@@ -14,6 +14,9 @@ struct Vertex
 
 class StaticMesh
 {
+public:
+    std::string m_name;
+    
 protected:
     unsigned int m_VBO = 0;
     unsigned int m_VAO = 0;
@@ -25,7 +28,7 @@ private:
 public:
     ~StaticMesh();
     
-    void InitializeMesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices);
+    void InitializeMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
     
     void Draw(Shader* aShader, glm::mat4 transMat);
 };

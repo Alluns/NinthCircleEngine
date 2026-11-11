@@ -6,8 +6,8 @@
 #include <glm/ext/matrix_transform.hpp>
 
 #include "Shader.h"
-#include "Debugging.h"
 #include "Mesh.h"
+#include "StaticMeshLoader.h"
 
 #include "OBJ-Loader/OBJ_Loader.h"
 
@@ -46,26 +46,34 @@ int main(int argc, char* argv[])
     
     // MESHES
     std::map<std::string, StaticMesh*> staticMeshes;
+    std::vector<Mesh> Meshes;
     
     
     // OBJ_Loader by Bly7: https://github.com/Bly7/OBJ-Loader/
     objl::Loader loader;
     
-    loader.LoadFile("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
+    loader.LoadFile("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
     loader.LoadedMeshes[0].Vertices;
+
+    for (auto loaded_mesh : loader.LoadedMeshes)
+    {
+        StaticMesh* sm = new StaticMesh;
+        sm->InitializeMesh(reinterpret_cast<std::vector<Vertex>&>(loaded_mesh.Vertices), loaded_mesh.Indices);
     
-    StaticMesh* sm = new StaticMesh;
-    sm->InitializeMesh(
-        reinterpret_cast<std::vector<Vertex>&>(loader.LoadedMeshes[0].Vertices),
-        reinterpret_cast<std::vector<int>&>(loader.LoadedMeshes[0].Indices));
+        staticMeshes.try_emplace(loaded_mesh.MeshName, sm);
+        
+        Mesh mesh = {
+            {},
+            staticMeshes.at(loaded_mesh.MeshName),
+            simpleShader
+        };
+        
+        Meshes.emplace_back(mesh);
+    }
     
-    staticMeshes.try_emplace(loader.LoadedMeshes[0].MeshName, sm);
-    
-    Mesh test_mesh = {
-        {},
-        staticMeshes.at(loader.LoadedMeshes[0].MeshName),
-        simpleShader
-    };
+    // Custom .obj loader
+    StaticMesh* sm2 = StaticMeshLoader::LoadMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+    Mesh* mesh2 = new Mesh({}, sm2, simpleShader);
     
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
@@ -77,10 +85,17 @@ int main(int argc, char* argv[])
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
+
+        for (Mesh& mesh : Meshes)
+        {
+            mesh.m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 4, cosf(glfwGetTime() * 2.0f) * 4, 0};
+            mesh.Draw();
+        }
+        
+        mesh2->m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 4 * -1, cosf(glfwGetTime() * 2.0f) * 4 * -1, 0};
+        mesh2->Draw();
         
         
-        test_mesh.m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 4, cosf(glfwGetTime() * 2.0f) * 4, 0};
-        test_mesh.Draw();
         
         
         glfwSwapBuffers(window);
