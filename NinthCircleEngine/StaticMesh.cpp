@@ -5,7 +5,7 @@
 
 #include "Debugging.h"
 
-void StaticMesh::InitializeMesh(const std::vector<float>& vertices, const std::vector<int>& indices)
+void StaticMesh::InitializeMesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices)
 {
     m_indexCount = indices.size();
     
@@ -14,7 +14,7 @@ void StaticMesh::InitializeMesh(const std::vector<float>& vertices, const std::v
     
     glGenBuffers(1, &m_VBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
     
     m_EBO = 0;
     if (!indices.empty())
@@ -24,8 +24,17 @@ void StaticMesh::InitializeMesh(const std::vector<float>& vertices, const std::v
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * indices.size(), indices.data(), GL_STATIC_DRAW);
     }
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(0 * sizeof(float)));
+    // Position
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
+    
+    // Normal
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+    
+    // Texture
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);

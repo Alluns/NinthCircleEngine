@@ -331,6 +331,7 @@
     <ClInclude Include="assets\shapes\Sphere.h" />
     <ClInclude Include="Debugging.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="OBJ-Loader\OBJ_Loader.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Transform.h" />
@@ -338,6 +339,7 @@
   <ItemGroup>
     <Content Include="assets\shaders\simpleShader.frag.glsl" />
     <Content Include="assets\shaders\simpleShader.vert.glsl" />
+    <Content Include="assets\static_meshes\monkey.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

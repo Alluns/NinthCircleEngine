@@ -12,8 +12,6 @@ public:
     
 private:
     glm::mat4  m_transMat;
-    glm::mat4* m_viewMat;
-    glm::mat4* m_projMat;
     
 public:
     Mesh(Transform transform, StaticMesh* mesh, Shader* shader);

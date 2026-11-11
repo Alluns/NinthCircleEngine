@@ -9,7 +9,7 @@ struct Vertex
 {
     glm::vec3 position;
     glm::vec3 normal;
-    glm::vec3 uv;
+    glm::vec2 uv;
 };
 
 class StaticMesh
@@ -25,7 +25,7 @@ private:
 public:
     ~StaticMesh();
     
-    void InitializeMesh(const std::vector<float>& vertices, const std::vector<int>& indices);
+    void InitializeMesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices);
     
     void Draw(Shader* aShader, glm::mat4 transMat);
 };

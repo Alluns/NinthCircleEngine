@@ -5,14 +5,11 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
-#include "assets/shapes/Cube.h"
-#include "assets/shapes/Sphere.h"
-#include "assets/shapes/Pyramid.h"
-
 #include "Shader.h"
 #include "Debugging.h"
 #include "Mesh.h"
 
+#include "OBJ-Loader/OBJ_Loader.h"
 
 int main(int argc, char* argv[])
 {
@@ -50,19 +47,29 @@ int main(int argc, char* argv[])
     // MESHES
     std::map<std::string, StaticMesh*> staticMeshes;
     
-    staticMeshes.try_emplace("cube",    new Cube());
-    staticMeshes.try_emplace("sphere",  new Sphere());
-    staticMeshes.try_emplace("pyramid", new Pyramid());
     
-    Mesh cube = {
+    // OBJ_Loader by Bly7: https://github.com/Bly7/OBJ-Loader/
+    objl::Loader loader;
+    
+    loader.LoadFile("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
+    loader.LoadedMeshes[0].Vertices;
+    
+    StaticMesh* sm = new StaticMesh;
+    sm->InitializeMesh(
+        reinterpret_cast<std::vector<Vertex>&>(loader.LoadedMeshes[0].Vertices),
+        reinterpret_cast<std::vector<int>&>(loader.LoadedMeshes[0].Indices));
+    
+    staticMeshes.try_emplace(loader.LoadedMeshes[0].MeshName, sm);
+    
+    Mesh test_mesh = {
         {},
-        staticMeshes.at("cube"),
+        staticMeshes.at(loader.LoadedMeshes[0].MeshName),
         simpleShader
     };
     
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     
@@ -71,11 +78,10 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
         
-        cube.m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 4, cosf(glfwGetTime()* 2.0f) * 4, 0};
         
-        // Draw all our cubes
-        simpleShader->SetVec3("aColor", {0.467f, 0.545f, 0.922f});
-        cube.Draw();
+        test_mesh.m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 4, cosf(glfwGetTime() * 2.0f) * 4, 0};
+        test_mesh.Draw();
+        
         
         glfwSwapBuffers(window);
         glfwPollEvents();

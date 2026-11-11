@@ -25,6 +25,6 @@ private:
 public:
     Pyramid()
     {
-        InitializeMesh(m_vertices, m_indices);
+        // InitializeMesh(m_vertices, m_indices);
     }
 };

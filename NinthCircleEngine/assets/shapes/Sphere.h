@@ -51,6 +51,6 @@ private:
 public:
     Sphere()
     {
-        InitializeMesh(m_vertices, m_indices);
+        // InitializeMesh(m_vertices, m_indices);
     }
 };

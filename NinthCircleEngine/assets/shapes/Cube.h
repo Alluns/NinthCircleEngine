@@ -34,6 +34,6 @@ private:
 public:
     Cube()
     {
-        InitializeMesh(m_vertices, m_indices);
+        // InitializeMesh(m_vertices, m_indices);
     }
 };
