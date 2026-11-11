@@ -12,6 +12,11 @@
 
 #include "OBJ-Loader/OBJ_Loader.h"
 
+
+float g_delta_time = 0.0f;
+float g_last_frame = 0.0f;
+
+
 int main(int argc, char* argv[])
 {
     if (!glfwInit())
@@ -84,12 +89,20 @@ int main(int argc, char* argv[])
     
     while (!glfwWindowShouldClose(window))
     {
+        // Calculate delta time
+        float current_frame = glfwGetTime();
+        g_delta_time = current_frame - g_last_frame;
+        g_last_frame = current_frame;
+        
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
 
+        
         // Camera
-        camera->m_camera_position = {0, 0, 5 + ((sinf(glfwGetTime()) + 1) / 2) * 4};
+        camera->ProcessInput(window, g_delta_time);
         simpleShader->SetMatrix4("view", camera->GetView());
+        
         
         for (Mesh& mesh : Meshes)
         {
@@ -97,8 +110,10 @@ int main(int argc, char* argv[])
             mesh.Draw();
         }
         
+        
         mesh2->m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 2 * -1, cosf(glfwGetTime() * 2.0f) * 2 * -1, 0};
         mesh2->Draw();
+        
         
         glfwSwapBuffers(window);
         glfwPollEvents();
