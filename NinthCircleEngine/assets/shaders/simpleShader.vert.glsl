@@ -10,12 +10,12 @@ out vec3 norm;
 uniform mat4 transform;
 uniform mat4 projection;
 uniform mat4 view;
-uniform vec3 aColor;
+uniform vec3 color;
 
 void main()
 {
    gl_Position = projection * view * transform * vec4(position, 1.0);
-   vertexColor = vec4(aColor, 1.0);
+   vertexColor = vec4(color, 1.0);
 
-    norm = normal;
+   norm = normal;
 };

@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
     // glm::mat4 projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.1f, 100.0f);
     
     simpleShader->SetMatrix4("projection", projection);
+    simpleShader->SetVec3("color", {0.992f, 0.447f, 0.447f});
 
     
     // MESHES
@@ -84,7 +85,7 @@ int main(int argc, char* argv[])
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     
