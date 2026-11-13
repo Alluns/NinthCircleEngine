@@ -325,6 +325,7 @@
     <ClCompile Include="NinthCircleEngine.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="StaticMeshLoader.cpp" />
+    <ClCompile Include="stb_image\stb_images.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -338,13 +339,23 @@
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="StaticMeshLoader.h" />
+    <ClInclude Include="stb_image\stb_image.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\shaders\simpleShader.frag.glsl" />
     <Content Include="assets\shaders\simpleShader.vert.glsl" />
     <Content Include="assets\static_meshes\monkey.obj" />
+    <Content Include="assets\static_meshes\mouse.obj" />
     <Content Include="assets\static_meshes\soule.obj" />
+    <Content Include="assets\textures\Mouse.png" />
+    <Content Include="assets\textures\soule\Body.png" />
+    <Content Include="assets\textures\soule\Dress.png" />
+    <Content Include="assets\textures\soule\Eyes.png" />
+    <Content Include="assets\textures\soule\Hair.png" />
+    <Content Include="assets\textures\soule\Horns.png" />
+    <Content Include="assets\textures\soule\Pumps.png" />
+    <Content Include="assets\textures\soule\Tail.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

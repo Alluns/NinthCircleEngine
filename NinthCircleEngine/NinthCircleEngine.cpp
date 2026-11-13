@@ -42,24 +42,22 @@ int main(int argc, char* argv[])
     simpleShader->Initialize("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
     simpleShader->Use();
     
-    
     // MATRIX STUFF
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
     // glm::mat4 projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.1f, 100.0f);
     
     simpleShader->SetMatrix4("projection", projection);
-    simpleShader->SetVec3("color", {0.992f, 0.447f, 0.447f});
-
+    // simpleShader->SetVec3("color", {0.992f, 0.447f, 0.447f});
+    simpleShader->SetVec3("color", {1.0f, 1.0f, 1.0f});
     
     // MESHES
     std::map<std::string, StaticMesh*> staticMeshes;
     std::vector<Mesh> Meshes;
     
-    
     // OBJ_Loader by Bly7: https://github.com/Bly7/OBJ-Loader/
     objl::Loader loader;
     
-    loader.LoadFile("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
+    loader.LoadFile("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
     loader.LoadedMeshes[0].Vertices;
 
     for (auto loaded_mesh : loader.LoadedMeshes)
@@ -79,7 +77,7 @@ int main(int argc, char* argv[])
     }
     
     // Custom .obj loader
-    StaticMesh* sm2 = StaticMeshLoader::LoadMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
+    StaticMesh* sm2 = StaticMeshLoader::LoadMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
     Mesh* mesh2 = new Mesh({}, sm2, simpleShader);
     
     
@@ -108,12 +106,12 @@ int main(int argc, char* argv[])
         
         for (Mesh& mesh : Meshes)
         {
-            mesh.m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 2, cosf(glfwGetTime() * 2.0f) * 2, 0};
+            mesh.m_transform.m_position = {sinf(glfwGetTime() * 0) * 2, cosf(glfwGetTime() * 0) * 2, 0};
             mesh.Draw();
         }
         
         
-        mesh2->m_transform.m_position = {sinf(glfwGetTime() * 2.0f) * 2 * -1, cosf(glfwGetTime() * 2.0f) * 2 * -1, 0};
+        mesh2->m_transform.m_position = {sinf(glfwGetTime() * 0) * 2 * -1, cosf(glfwGetTime() * 0) * 2 * -1, 0};
         mesh2->Draw();
         
         

@@ -78,7 +78,7 @@ StaticMesh* StaticMeshLoader::LoadMesh(const std::string& path)
                         temp_uvs[uv_idx]
                     };
                     
-                    // // dupe check
+                    // dupe check
                     // int existing_index = -1;
                     // for (unsigned int j = 0; j < vertices.size(); ++j)
                     // {

@@ -22,6 +22,10 @@ protected:
     unsigned int m_VAO = 0;
     unsigned int m_EBO = 0;
     
+    unsigned int m_texture = 0;
+    
+    std::string m_texture_path = "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Dress.png";
+    
 private:
     int m_indexCount = 0;
     
