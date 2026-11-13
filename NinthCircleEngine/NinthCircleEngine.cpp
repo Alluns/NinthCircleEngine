@@ -84,6 +84,7 @@ int main(int argc, char* argv[])
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     

@@ -1,5 +1,6 @@
 #include "Camera.h"
 
+#include <algorithm>
 #include <glm/ext/matrix_transform.hpp>
 
 glm::mat4 Camera::GetView()
@@ -9,6 +10,29 @@ glm::mat4 Camera::GetView()
 
 void Camera::ProcessInput(GLFWwindow* window, float delta_time)
 {
+    // Rotation
+    glm::dvec2 current_position;
+    glfwGetCursorPos(window, &current_position.x, &current_position.y);
+    
+    glm::dvec2 offset = current_position - m_last_position;
+    m_last_position = current_position;
+    
+    offset *= m_camera_sensitivity;
+    
+    yaw   += offset.x;
+    pitch -= offset.y;
+
+    pitch = std::min(pitch, 89.0f);
+    pitch = std::max(pitch, -89.0f);
+    
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    m_camera_forward = glm::normalize(direction);
+
+    
+    // Movement
     float actual_speed = m_camera_speed * delta_time;
     
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
