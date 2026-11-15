@@ -5,6 +5,7 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
+#include "AssetManager.h"
 #include "Camera.h"
 #include "Shader.h"
 #include "Mesh.h"
@@ -39,7 +40,7 @@ int main(int argc, char* argv[])
     
     // SHADERS
     Shader* simpleShader = new Shader;
-    simpleShader->Initialize("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
+    simpleShader->Initialize("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
     simpleShader->Use();
     
     // MATRIX STUFF
@@ -57,7 +58,7 @@ int main(int argc, char* argv[])
     // OBJ_Loader by Bly7: https://github.com/Bly7/OBJ-Loader/
     objl::Loader loader;
     
-    loader.LoadFile("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+    loader.LoadFile("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
     loader.LoadedMeshes[0].Vertices;
 
     for (auto loaded_mesh : loader.LoadedMeshes)
@@ -77,7 +78,9 @@ int main(int argc, char* argv[])
     }
     
     // Custom .obj loader
-    StaticMesh* sm2 = StaticMeshLoader::LoadMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+    AssetManager* asset_manager = new AssetManager;
+    
+    StaticMesh* sm2 = asset_manager->LoadStaticMesh("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
     Mesh* mesh2 = new Mesh({}, sm2, simpleShader);
     
     
