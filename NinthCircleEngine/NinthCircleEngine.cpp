@@ -9,9 +9,6 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Mesh.h"
-#include "StaticMeshLoader.h"
-
-#include "OBJ-Loader/OBJ_Loader.h"
 
 
 float g_delta_time = 0.0f;
@@ -52,36 +49,10 @@ int main(int argc, char* argv[])
     simpleShader->SetVec3("color", {1.0f, 1.0f, 1.0f});
     
     // MESHES
-    std::map<std::string, StaticMesh*> staticMeshes;
-    std::vector<Mesh> Meshes;
-    
-    // OBJ_Loader by Bly7: https://github.com/Bly7/OBJ-Loader/
-    objl::Loader loader;
-    
-    loader.LoadFile("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
-    loader.LoadedMeshes[0].Vertices;
-
-    for (auto loaded_mesh : loader.LoadedMeshes)
-    {
-        StaticMesh* sm = new StaticMesh;
-        sm->InitializeMesh(reinterpret_cast<std::vector<Vertex>&>(loaded_mesh.Vertices), loaded_mesh.Indices);
-    
-        staticMeshes.try_emplace(loaded_mesh.MeshName, sm);
-        
-        Mesh mesh = {
-            {},
-            staticMeshes.at(loaded_mesh.MeshName),
-            simpleShader
-        };
-        
-        Meshes.emplace_back(mesh);
-    }
-    
-    // Custom .obj loader
     AssetManager* asset_manager = new AssetManager;
     
-    StaticMesh* sm2 = asset_manager->LoadStaticMesh("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
-    Mesh* mesh2 = new Mesh({}, sm2, simpleShader);
+    StaticMesh* static_mesh = asset_manager->LoadStaticMesh("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+    Mesh* mesh = new Mesh({}, static_mesh, simpleShader);
     
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
@@ -106,16 +77,8 @@ int main(int argc, char* argv[])
         camera->ProcessInput(window, g_delta_time);
         simpleShader->SetMatrix4("view", camera->GetView());
         
-        
-        for (Mesh& mesh : Meshes)
-        {
-            mesh.m_transform.m_position = {sinf(glfwGetTime() * 0) * 2, cosf(glfwGetTime() * 0) * 2, 0};
-            mesh.Draw();
-        }
-        
-        
-        mesh2->m_transform.m_position = {sinf(glfwGetTime() * 0) * 2 * -1, cosf(glfwGetTime() * 0) * 2 * -1, 0};
-        mesh2->Draw();
+        mesh->m_transform.m_position = {sinf(glfwGetTime() * 0) * 2 * -1, cosf(glfwGetTime() * 0) * 2 * -1, 0};
+        mesh->Draw();
         
         
         glfwSwapBuffers(window);

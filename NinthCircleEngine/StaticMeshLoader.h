@@ -3,6 +3,6 @@
 
 class StaticMeshLoader
 {
-public:
+public:    
     static StaticMesh* LoadMesh(const std::string& path);
 };

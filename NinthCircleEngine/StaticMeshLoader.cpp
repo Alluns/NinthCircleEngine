@@ -3,8 +3,26 @@
 #include <fstream>
 #include <sstream>
 
+#include "OBJ-Loader/OBJ_Loader.h"
+
 StaticMesh* StaticMeshLoader::LoadMesh(const std::string& path)
 {
+    const bool use_external_loader = false;
+    
+    if (use_external_loader)
+    {
+        objl::Loader loader;
+    
+        loader.LoadFile("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+        loader.LoadedMeshes[0].Vertices;
+        
+        StaticMesh* static_mesh = new StaticMesh;
+        static_mesh->InitializeMesh(reinterpret_cast<std::vector<Vertex>&>(loader.LoadedMeshes[0].Vertices), loader.LoadedMeshes[0].Indices);
+            
+        return static_mesh;
+    }
+    
+    // TODO: Make the 'LoadMesh' function return a list of each separate mesh in the obj files instead of fusing them all together
     std::vector<glm::vec3> temp_positions;
     std::vector<glm::vec3> temp_normals;
     std::vector<glm::vec2> temp_uvs;
@@ -13,7 +31,6 @@ StaticMesh* StaticMeshLoader::LoadMesh(const std::string& path)
     std::vector<unsigned int> indices;
     
     std::string name;
-    
     
     // Load file
     std::ifstream file(path);
