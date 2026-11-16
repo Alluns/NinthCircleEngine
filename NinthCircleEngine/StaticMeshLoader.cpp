@@ -13,7 +13,7 @@ StaticMesh* StaticMeshLoader::LoadMesh(const std::string& path)
     {
         objl::Loader loader;
     
-        loader.LoadFile("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+        loader.LoadFile(path);
         loader.LoadedMeshes[0].Vertices;
         
         StaticMesh* static_mesh = new StaticMesh;

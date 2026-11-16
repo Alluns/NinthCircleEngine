@@ -15,6 +15,5 @@ void main()
 {
     float dot_prod = max(dot(norm, directional_light), ambient_light);
 
-    FragColor = texture(my_texture, tex_cord);
-    //FragColor = vec4(norm, 1.0);
+    FragColor = texture(my_texture, tex_cord) * vertexColor * dot_prod;
 };

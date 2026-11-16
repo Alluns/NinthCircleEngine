@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     
     // SHADERS
     Shader* simpleShader = new Shader;
-    simpleShader->Initialize("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
+    simpleShader->Initialize("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
     simpleShader->Use();
     
     // MATRIX STUFF
@@ -45,19 +45,25 @@ int main(int argc, char* argv[])
     // glm::mat4 projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.1f, 100.0f);
     
     simpleShader->SetMatrix4("projection", projection);
-    // simpleShader->SetVec3("color", {0.992f, 0.447f, 0.447f});
     simpleShader->SetVec3("color", {1.0f, 1.0f, 1.0f});
     
     // MESHES
     AssetManager* asset_manager = new AssetManager;
+    std::vector<StaticMesh*> static_meshes;
+    std::vector<Mesh*> meshes;
     
-    StaticMesh* static_mesh = asset_manager->LoadStaticMesh("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
-    Mesh* mesh = new Mesh({}, static_mesh, simpleShader);
-    
+    asset_manager->LoadStaticMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
+    asset_manager->LoadStaticMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+
+    for (std::pair<const std::string, StaticMesh*> static_mesh : asset_manager->GetAllStaticMeshes())
+    {
+        Mesh* mesh = new Mesh({}, static_mesh.second, simpleShader);
+        meshes.emplace_back(mesh);
+    }
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     
@@ -76,10 +82,12 @@ int main(int argc, char* argv[])
         // Camera
         camera->ProcessInput(window, g_delta_time);
         simpleShader->SetMatrix4("view", camera->GetView());
-        
-        mesh->m_transform.m_position = {sinf(glfwGetTime() * 0) * 2 * -1, cosf(glfwGetTime() * 0) * 2 * -1, 0};
-        mesh->Draw();
-        
+
+        for (int i = 0; i < meshes.size(); ++i)
+        {
+            meshes[i]->m_transform.m_position = {i * 3, cosf(glfwGetTime() * 0) * 0.1f * -1, 0};
+            meshes[i]->Draw();
+        }
         
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -115,6 +115,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -348,9 +349,7 @@
     <Content Include="assets\shaders\simpleShader.frag.glsl" />
     <Content Include="assets\shaders\simpleShader.vert.glsl" />
     <Content Include="assets\static_meshes\monkey.obj" />
-    <Content Include="assets\static_meshes\mouse.obj" />
     <Content Include="assets\static_meshes\soule.obj" />
-    <Content Include="assets\textures\Mouse.png" />
     <Content Include="assets\textures\soule\Body.png" />
     <Content Include="assets\textures\soule\Dress.png" />
     <Content Include="assets\textures\soule\Eyes.png" />
