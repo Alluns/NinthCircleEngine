@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     
     // SHADERS
     Shader* simpleShader = new Shader;
-    simpleShader->Initialize("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
+    simpleShader->Initialize("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
     simpleShader->Use();
     
     // MATRIX STUFF
@@ -52,8 +52,11 @@ int main(int argc, char* argv[])
     std::vector<StaticMesh*> static_meshes;
     std::vector<Mesh*> meshes;
     
-    asset_manager->LoadStaticMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
-    asset_manager->LoadStaticMesh("C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+    asset_manager->LoadStaticMesh("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
+    
+    asset_manager->LoadStaticMesh("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
+    
+    asset_manager->GetAllStaticMeshes().at("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj")->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Dress.png");
 
     for (std::pair<const std::string, StaticMesh*> static_mesh : asset_manager->GetAllStaticMeshes())
     {

@@ -22,30 +22,6 @@ void StaticMesh::InitializeMesh(const std::vector<Vertex>& vertices, const std::
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), indices.data(), GL_STATIC_DRAW);
     
     
-    // TEXTURE STUFF
-    glGenTextures(1, &m_texture);
-    glBindTexture(GL_TEXTURE_2D, m_texture);
-    // set the texture wrapping/filtering options (on the currently bound texture object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load and generate the texture
-    int width, height, nr_channels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char *data = stbi_load(m_texture_path.c_str(), &width, &height, &nr_channels, 4);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-    
-    
     // Position
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
@@ -74,12 +50,14 @@ void StaticMesh::Draw(Shader* aShader, glm::mat4 transMat)
 {
     aShader->SetMatrix4("transform", transMat);
     aShader->Use();
+
+    if (m_texture) m_texture->Use();
     
-    glBindTexture(GL_TEXTURE_2D, m_texture);
     glBindVertexArray(m_VAO);
 
     if (m_EBO == 0) glDrawArrays(GL_TRIANGLES, 0, 3);
     else            glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
     
     glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

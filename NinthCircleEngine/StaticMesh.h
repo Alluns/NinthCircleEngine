@@ -3,6 +3,7 @@
 #include <glm/ext/matrix_float4x4.hpp>
 
 #include "Shader.h"
+#include "Texture.h"
 #include "Transform.h"
 
 struct Vertex
@@ -22,9 +23,8 @@ protected:
     unsigned int m_VAO = 0;
     unsigned int m_EBO = 0;
     
-    unsigned int m_texture = 0;
-    
-    std::string m_texture_path = "C:/Users/allan.backman/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Dress.png";
+public:
+    Texture* m_texture = nullptr;
     
 private:
     int m_indexCount = 0;

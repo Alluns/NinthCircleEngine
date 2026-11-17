@@ -328,6 +328,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="StaticMeshLoader.cpp" />
     <ClCompile Include="stb_image\stb_images.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +344,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="StaticMeshLoader.h" />
     <ClInclude Include="stb_image\stb_image.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
