@@ -1,8 +1,12 @@
 #pragma once
+
+#include <vector>
+#include <string>
+
 #include "StaticMesh.h"
 
 class StaticMeshLoader
 {
 public:    
-    static StaticMesh* LoadMesh(const std::string& path);
+    static std::vector<StaticMesh*> LoadMeshFile(const std::string& path);
 };

@@ -51,7 +51,7 @@ void StaticMesh::Draw(Shader* aShader, glm::mat4 transMat)
     aShader->SetMatrix4("transform", transMat);
     aShader->Use();
 
-    if (m_texture) m_texture->Use();
+    m_texture->Use();
     
     glBindVertexArray(m_VAO);
 

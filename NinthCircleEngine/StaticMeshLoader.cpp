@@ -5,21 +5,29 @@
 
 #include "OBJ-Loader/OBJ_Loader.h"
 
-StaticMesh* StaticMeshLoader::LoadMesh(const std::string& path)
+std::vector<StaticMesh*> StaticMeshLoader::LoadMeshFile(const std::string& path)
 {
-    const bool use_external_loader = false;
+    const bool use_external_loader = true;
     
     if (use_external_loader)
     {
+        std::vector<StaticMesh*> static_meshes;
+        
         objl::Loader loader;
     
         loader.LoadFile(path);
-        loader.LoadedMeshes[0].Vertices;
-        
-        StaticMesh* static_mesh = new StaticMesh;
-        static_mesh->InitializeMesh(reinterpret_cast<std::vector<Vertex>&>(loader.LoadedMeshes[0].Vertices), loader.LoadedMeshes[0].Indices);
+
+        for (objl::Mesh loaded_mesh : loader.LoadedMeshes)
+        {
+            StaticMesh* static_mesh = new StaticMesh;
             
-        return static_mesh;
+            static_mesh->m_name = loaded_mesh.MeshName;
+            static_mesh->InitializeMesh(reinterpret_cast<std::vector<Vertex>&>(loaded_mesh.Vertices), loaded_mesh.Indices);
+            
+            static_meshes.emplace_back(static_mesh);
+        }
+        
+        return static_meshes;
     }
     
     // TODO: Make the 'LoadMesh' function return a list of each separate mesh in the obj files instead of fusing them all together
@@ -37,7 +45,7 @@ StaticMesh* StaticMeshLoader::LoadMesh(const std::string& path)
     if (!file.is_open())
     {
         std::cout << "Failed to open file: " << path << "\n";
-        return nullptr;
+        return {nullptr};
     }
     
     std::string line;
@@ -129,9 +137,9 @@ StaticMesh* StaticMeshLoader::LoadMesh(const std::string& path)
     
     
     // Construct mesh
-    StaticMesh* mesh = new StaticMesh();
-    mesh->m_name = name;
-    mesh->InitializeMesh(vertices, indices);
+    StaticMesh* static_mesh = new StaticMesh();
+    static_mesh->m_name = name;
+    static_mesh->InitializeMesh(vertices, indices);
     
-    return mesh;
+    return {static_mesh};
 }

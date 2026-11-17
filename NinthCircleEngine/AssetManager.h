@@ -1,8 +1,9 @@
 #pragma once
+
 #include <map>
 #include <string>
+#include <vector>
 
-#include "Mesh.h"
 #include "StaticMesh.h"
 
 class AssetManager
@@ -16,7 +17,7 @@ public:
     ~AssetManager();
     
     // TODO: Add support for shaders
-    StaticMesh* LoadStaticMesh(const std::string& path);
+    std::vector<StaticMesh*> LoadStaticMeshes(const std::string& path);
     Texture* LoadTexture(const std::string& path);
     
     std::map<std::string, StaticMesh*> GetAllStaticMeshes() { return m_static_meshes; }

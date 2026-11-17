@@ -352,6 +352,7 @@
     <Content Include="assets\shaders\simpleShader.vert.glsl" />
     <Content Include="assets\static_meshes\monkey.obj" />
     <Content Include="assets\static_meshes\soule.obj" />
+    <Content Include="assets\textures\missing_texture.png" />
     <Content Include="assets\textures\soule\Body.png" />
     <Content Include="assets\textures\soule\Dress.png" />
     <Content Include="assets\textures\soule\Eyes.png" />

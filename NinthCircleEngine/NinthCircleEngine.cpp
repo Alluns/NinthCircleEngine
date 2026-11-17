@@ -49,20 +49,25 @@ int main(int argc, char* argv[])
     
     // MESHES
     AssetManager* asset_manager = new AssetManager;
-    std::vector<StaticMesh*> static_meshes;
     std::vector<Mesh*> meshes;
-    
-    asset_manager->LoadStaticMesh("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/monkey.obj");
-    
-    asset_manager->LoadStaticMesh("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj");
-    
-    asset_manager->GetAllStaticMeshes().at("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj")->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Dress.png");
 
-    for (std::pair<const std::string, StaticMesh*> static_mesh : asset_manager->GetAllStaticMeshes())
+    Mesh* mesh = new Mesh({}, asset_manager->LoadStaticMeshes("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj"), simpleShader);
+
+    for (auto& static_mesh : mesh->m_static_meshes)
     {
-        Mesh* mesh = new Mesh({}, static_mesh.second, simpleShader);
-        meshes.emplace_back(mesh);
+        // TODO: Make this the default texture for any static_mesh without one (nullptr)
+        static_mesh->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/missing_texture.png");
     }
+    
+    mesh->m_static_meshes[0]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Dress.png");
+    mesh->m_static_meshes[2]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Eyes.png");
+    mesh->m_static_meshes[3]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Tail.png");
+    mesh->m_static_meshes[4]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Pumps.png");
+    mesh->m_static_meshes[5]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Horns.png");
+    mesh->m_static_meshes[6]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Hair.png");
+    mesh->m_static_meshes[7]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Body.png");
+    
+    meshes.emplace_back(mesh);
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
