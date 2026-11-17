@@ -7,14 +7,15 @@ class Mesh
 {
 public:
     Transform m_transform = {{0, 0,0 },{0, 0, 0},{1, 1, 1}};
-    StaticMesh* m_staticMesh = nullptr;
+    std::vector<StaticMesh*> m_static_meshes = {nullptr};
     Shader* m_shader = nullptr;
     
 private:
     glm::mat4  m_transMat;
     
 public:
-    Mesh(Transform transform, StaticMesh* mesh, Shader* shader);
+    Mesh(Transform transform, StaticMesh* static_mesh, Shader* shader);
+    Mesh(Transform transform, std::vector<StaticMesh*> static_meshes, Shader* shader);
     
     void Draw();
 };
