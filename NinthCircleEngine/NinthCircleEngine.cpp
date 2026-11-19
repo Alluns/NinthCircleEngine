@@ -14,44 +14,59 @@
 float g_delta_time = 0.0f;
 float g_last_frame = 0.0f;
 
+std::vector<Mesh*> g_meshes;
+Shader* g_simpleShader;
+Camera* g_camera;
+
+
+void Initialize();
+void InitializeOpenGL();
+
+void Logic();
+void Render();
+
+GLFWwindow* OpenWindow();
+
 
 int main(int argc, char* argv[])
 {
-    if (!glfwInit())
+    Initialize();
+    
+    while (!glfwWindowShouldClose(glfwGetCurrentContext()))
     {
-        std::cout << "failed to initialize glfw" << '\n';
-        return -1;
+        Logic();
+        Render();
     }
+    
+    return 0;
+}
 
-    GLFWwindow* window = glfwCreateWindow(720, 720, "Ninth Circle Engine", nullptr, nullptr);
+void Initialize()
+{
+    GLFWwindow* window = OpenWindow();
     glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << '\n';
-        return -1;
-    }
+    
+    InitializeOpenGL();
     
     // CAMERA
-    Camera* camera = new Camera;
+    g_camera = new Camera;
     
     // SHADERS
-    Shader* simpleShader = new Shader;
-    simpleShader->Initialize("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
-    simpleShader->Use();
+    g_simpleShader = new Shader;
+    g_simpleShader->Initialize("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
+    g_simpleShader->Use();
     
     // MATRIX STUFF
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1080.0f/720.0f, 0.1f, 100.0f);
     // glm::mat4 projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.1f, 100.0f);
     
-    simpleShader->SetMatrix4("projection", projection);
-    simpleShader->SetVec3("color", {1.0f, 1.0f, 1.0f});
+    g_simpleShader->SetMatrix4("projection", projection);
+    g_simpleShader->SetVec3("color", {1.0f, 1.0f, 1.0f});
     
     // MESHES
     AssetManager* asset_manager = new AssetManager;
-    std::vector<Mesh*> meshes;
 
-    Mesh* mesh = new Mesh({}, asset_manager->LoadStaticMeshes("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj"), simpleShader);
+    Mesh* mesh = new Mesh({}, asset_manager->LoadStaticMeshes("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj"), g_simpleShader);
 
     for (auto& static_mesh : mesh->m_static_meshes)
     {
@@ -67,39 +82,64 @@ int main(int argc, char* argv[])
     mesh->m_static_meshes[6]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Hair.png");
     mesh->m_static_meshes[7]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Body.png");
     
-    meshes.emplace_back(mesh);
+    g_meshes.emplace_back(mesh);
+}
+
+GLFWwindow* OpenWindow()
+{
+    if (!glfwInit())
+    {
+        std::cout << "ERROR: Failed to initialize glfw" << '\n';
+        return nullptr;
+    }
+    
+    return glfwCreateWindow(1080, 720, "Ninth Circle Engine", nullptr, nullptr);
+}
+
+void InitializeOpenGL()
+{
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "ERROR: Failed to initialize GLAD" << '\n';
+        return;
+    }
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+}
+
+void Input()
+{
     
-    while (!glfwWindowShouldClose(window))
+}
+
+void Logic()
+{
+    // Calculate delta time
+    float current_frame = glfwGetTime();
+    g_delta_time = current_frame - g_last_frame;
+    g_last_frame = current_frame;
+    
+    // Camera
+    // TODO: Camera's 'ProcessInput' method should not read user inputs
+    g_camera->ProcessInput(glfwGetCurrentContext(), g_delta_time);
+    g_simpleShader->SetMatrix4("view", g_camera->GetView());
+}
+
+void Render()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
+    
+    for (int i = 0; i < g_meshes.size(); ++i)
     {
-        // Calculate delta time
-        float current_frame = glfwGetTime();
-        g_delta_time = current_frame - g_last_frame;
-        g_last_frame = current_frame;
-        
-        
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
-
-        
-        // Camera
-        camera->ProcessInput(window, g_delta_time);
-        simpleShader->SetMatrix4("view", camera->GetView());
-
-        for (int i = 0; i < meshes.size(); ++i)
-        {
-            meshes[i]->m_transform.m_position = {i * 3, cosf(glfwGetTime() * 0) * 0.1f * -1, 0};
-            meshes[i]->Draw();
-        }
-        
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        g_meshes[i]->m_transform.m_position = {i * 3, cosf(glfwGetTime() * 0) * 0.1f * -1, 0};
+        g_meshes[i]->Draw();
     }
-    
-    return 0;
+        
+    glfwSwapBuffers(glfwGetCurrentContext());
+    glfwPollEvents();
 }

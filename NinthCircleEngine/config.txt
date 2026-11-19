@@ -1,0 +1,5 @@
+# Title of the game
+name Ninth Circle Engine
+
+# Window size described in pixels (width height)
+window 1080 720
