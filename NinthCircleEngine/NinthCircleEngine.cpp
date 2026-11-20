@@ -7,6 +7,7 @@
 
 #include "AssetManager.h"
 #include "Camera.h"
+#include "InputManager.h"
 #include "Shader.h"
 #include "Mesh.h"
 
@@ -14,6 +15,7 @@
 float g_delta_time = 0.0f;
 float g_last_frame = 0.0f;
 
+InputManager* g_input_manager;
 std::vector<Mesh*> g_meshes;
 Shader* g_simpleShader;
 Camera* g_camera;
@@ -93,7 +95,13 @@ GLFWwindow* OpenWindow()
         return nullptr;
     }
     
-    return glfwCreateWindow(1080, 720, "Ninth Circle Engine", nullptr, nullptr);
+    const int width = 1080;
+    const int height = 720;
+    
+    GLFWwindow* window = glfwCreateWindow(width, height, "Ninth Circle Engine", nullptr, nullptr);
+    
+    g_input_manager = new InputManager(window, width, height);
+    return window;
 }
 
 void InitializeOpenGL()
@@ -106,7 +114,6 @@ void InitializeOpenGL()
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 }
@@ -124,8 +131,25 @@ void Logic()
     g_last_frame = current_frame;
     
     // Camera
-    // TODO: Camera's 'ProcessInput' method should not read user inputs
-    g_camera->ProcessInput(glfwGetCurrentContext(), g_delta_time);
+    // TODO: Move this to the input method
+    g_input_manager->Update();
+
+    if (g_input_manager->IsKeyPressed(GLFW_KEY_F))
+    {
+        g_input_manager->IsFocused(!g_input_manager->IsFocused());
+    }
+
+    if (g_input_manager->IsFocused())
+    {
+        glm::vec3 direction = {
+            g_input_manager->IsKeyPressed(GLFW_KEY_W) - g_input_manager->IsKeyPressed(GLFW_KEY_S),
+            g_input_manager->IsKeyPressed(GLFW_KEY_SPACE) - g_input_manager->IsKeyPressed(GLFW_KEY_LEFT_CONTROL),
+            g_input_manager->IsKeyPressed(GLFW_KEY_D) - g_input_manager->IsKeyPressed(GLFW_KEY_A),
+        };
+    
+        g_camera->Update(g_input_manager->GetMouseDelta(), direction, g_delta_time);
+    }
+    
     g_simpleShader->SetMatrix4("view", g_camera->GetView());
 }
 

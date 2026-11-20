@@ -170,6 +170,7 @@
     <ClCompile Include="assets\shapes\Sphere.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad\glad.c" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Mesh.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -338,6 +339,7 @@
     <ClInclude Include="assets\shapes\Sphere.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Debugging.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="OBJ-Loader\OBJ_Loader.h" />
     <ClInclude Include="StaticMesh.h" />
