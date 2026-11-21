@@ -21,8 +21,8 @@ Shader* g_simpleShader;
 Camera* g_camera;
 
 
-void Initialize();
-void InitializeOpenGL();
+bool Initialize();
+bool InitializeOpenGL();
 
 void Logic();
 void Render();
@@ -32,10 +32,11 @@ GLFWwindow* OpenWindow();
 
 int main(int argc, char* argv[])
 {
-    Initialize();
+    if (!Initialize()) return -1;
     
     while (!glfwWindowShouldClose(glfwGetCurrentContext()))
     {
+        g_input_manager->Update();
         Logic();
         Render();
     }
@@ -43,12 +44,12 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void Initialize()
+bool Initialize()
 {
     GLFWwindow* window = OpenWindow();
     glfwMakeContextCurrent(window);
-    
-    InitializeOpenGL();
+
+    if (!InitializeOpenGL()) return false;
     
     // CAMERA
     g_camera = new Camera;
@@ -85,6 +86,13 @@ void Initialize()
     mesh->m_static_meshes[7]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Body.png");
     
     g_meshes.emplace_back(mesh);
+    
+    return true;
+}
+
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    g_input_manager->KeyCallback(window, key, scancode, action, mods);
 }
 
 GLFWwindow* OpenWindow()
@@ -101,40 +109,37 @@ GLFWwindow* OpenWindow()
     GLFWwindow* window = glfwCreateWindow(width, height, "Ninth Circle Engine", nullptr, nullptr);
     
     g_input_manager = new InputManager(window, width, height);
+    
+    glfwSetKeyCallback(window, KeyCallback);
+    
     return window;
 }
 
-void InitializeOpenGL()
+bool InitializeOpenGL()
 {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "ERROR: Failed to initialize GLAD" << '\n';
-        return;
+        return false;
     }
     
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-}
-
-void Input()
-{
     
+    return true;
 }
 
 void Logic()
 {
     // Calculate delta time
-    float current_frame = glfwGetTime();
+    const float current_frame = static_cast<float>(glfwGetTime());
     g_delta_time = current_frame - g_last_frame;
     g_last_frame = current_frame;
     
     // Camera
-    // TODO: Move this to the input method
-    g_input_manager->Update();
-
-    if (g_input_manager->IsKeyPressed(GLFW_KEY_F))
+    if (g_input_manager->IsKeyJustPressed(GLFW_KEY_F))
     {
         g_input_manager->IsFocused(!g_input_manager->IsFocused());
     }
@@ -158,12 +163,8 @@ void Render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
     
-    for (int i = 0; i < g_meshes.size(); ++i)
-    {
-        g_meshes[i]->m_transform.m_position = {i * 3, cosf(glfwGetTime() * 0) * 0.1f * -1, 0};
-        g_meshes[i]->Draw();
-    }
+    for (auto& mesh : g_meshes)
+        mesh->Draw();
         
     glfwSwapBuffers(glfwGetCurrentContext());
-    glfwPollEvents();
 }

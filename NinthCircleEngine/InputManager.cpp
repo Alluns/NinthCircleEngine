@@ -1,5 +1,7 @@
 #include "InputManager.h"
 
+#include <ranges>
+
 InputManager::InputManager(GLFWwindow* window, const int width, const int height)
 {
     m_window = window;
@@ -8,6 +10,11 @@ InputManager::InputManager(GLFWwindow* window, const int width, const int height
 
 void InputManager::Update()
 {
+    for (int& state : m_key_states | std::views::values)
+        if (state == 1) { state = 2; }
+    
+    glfwPollEvents();
+    
     // MOUSE
     glm::dvec2 last_mouse_position = m_mouse_position;
     
@@ -15,9 +22,12 @@ void InputManager::Update()
     m_mouse_delta = m_mouse_position - last_mouse_position;
 }
 
-bool InputManager::IsKeyPressed(int key)
+void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    return glfwGetKey(m_window, key) == GLFW_PRESS;
+    if (!m_key_states.contains(key)) m_key_states[key] = 0;
+    
+         if (action == GLFW_PRESS && m_key_states[key] == 0) { m_key_states[key] = 1; }
+    else if (action == GLFW_RELEASE)                         { m_key_states[key] = 0; }
 }
 
 void InputManager::IsFocused(bool value)
