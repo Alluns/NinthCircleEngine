@@ -1,31 +1,32 @@
 #include "Object.h"
 
 
-Transform Object::GetTransform() const { return m_parent ? m_parent->GetTransform() + GetLocalTransform() : GetLocalTransform(); }
+Object::~Object()
+{
+    for (Object* const& child : m_children)
+        delete child;
+}
 
-glm::vec3 Object::GetPosition() const { return m_parent ? m_parent->GetPosition() + GetLocalPosition() : GetLocalPosition(); }
-glm::vec3 Object::GetRotation() const { return m_parent ? m_parent->GetRotation() + GetLocalRotation() : GetLocalRotation(); }
-glm::vec3 Object::GetScale() const { return m_parent ? m_parent->GetScale() + GetLocalScale() : GetLocalScale(); }
+Transform Object::GetTransform() { return m_parent ? m_parent->GetTransform() + GetLocalTransform() : GetLocalTransform(); }
+
+glm::vec3 Object::GetPosition() { return m_parent ? m_parent->GetPosition() + GetLocalPosition() : GetLocalPosition(); }
+glm::vec3 Object::GetRotation() { return m_parent ? m_parent->GetRotation() + GetLocalRotation() : GetLocalRotation(); }
+glm::vec3 Object::GetScale() { return m_parent ? m_parent->GetScale() + GetLocalScale() : GetLocalScale(); }
 
 
 Object* Object::GetRootParent() { return m_parent ? m_parent->GetRootParent() : this; }
 
 void Object::SetParent(Object* object)
 {
-    if (m_parent == nullptr || m_parent == object) { return; }
+    if (m_parent) { m_parent->RemoveChild(this); }
     
-    m_parent->RemoveChild(this);
     object->AddChild(this);
+    m_parent = object;
 }
 
 void Object::AddChild(Object* object)
 {
-    for (Object* const& child : m_children)
-        if (child == object)
-            return;
-    
     m_children.emplace_back(object);
-    object->SetParent(this);
 }
 
 void Object::RemoveChild(const Object* object)

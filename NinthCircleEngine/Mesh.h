@@ -3,7 +3,7 @@
 #include "StaticMesh.h"
 #include "Shader.h"
 
-class Mesh : Object
+class Mesh: public Object
 {
 public:
     std::vector<StaticMesh*> m_static_meshes = {nullptr};

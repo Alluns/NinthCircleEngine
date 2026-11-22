@@ -9,6 +9,7 @@
 #include "InputManager.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "PlayerController.h"
 
 
 float g_delta_time = 0.0f;
@@ -18,6 +19,7 @@ InputManager* g_input_manager;
 std::vector<Mesh*> g_meshes;
 Shader* g_simpleShader;
 Camera* g_camera;
+PlayerController* g_player_controller;
 
 
 bool Initialize();
@@ -51,7 +53,11 @@ bool Initialize()
     if (!InitializeOpenGL()) return false;
     
     // CAMERA
-    g_camera = new Camera;
+    g_camera = new Camera(1080, 720);
+    
+    // Player Controller
+    g_player_controller = new PlayerController(g_input_manager);
+    g_player_controller->SetParent(g_camera);
     
     // SHADERS
     g_simpleShader = new Shader;
@@ -136,18 +142,11 @@ void Logic()
 
     if (g_input_manager->IsKeyJustPressed(GLFW_KEY_F4))
         g_camera->SetIsOrthographic(!g_camera->IsOrthographic());
-
-    if (g_input_manager->IsFocused())
-    {
-        glm::vec3 direction = {
-            g_input_manager->IsKeyPressed(GLFW_KEY_W) - g_input_manager->IsKeyPressed(GLFW_KEY_S),
-            g_input_manager->IsKeyPressed(GLFW_KEY_SPACE) - g_input_manager->IsKeyPressed(GLFW_KEY_LEFT_CONTROL),
-            g_input_manager->IsKeyPressed(GLFW_KEY_D) - g_input_manager->IsKeyPressed(GLFW_KEY_A),
-        };
     
-        g_camera->Update(g_input_manager->GetMouseDelta(), direction, g_delta_time);
-    }
+    // Player Controller
+    g_player_controller->update(g_delta_time);
     
+    // Shader
     g_simpleShader->SetMatrix4("view", g_camera->GetView());
 }
 
