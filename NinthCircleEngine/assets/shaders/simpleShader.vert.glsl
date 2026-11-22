@@ -11,7 +11,7 @@ out vec2 tex_cord;
 uniform mat4 transform;
 uniform mat4 projection;
 uniform mat4 view;
-uniform vec3 color;
+uniform vec3 color = {1.0f, 1.0f, 1.0f};
 
 void main()
 {

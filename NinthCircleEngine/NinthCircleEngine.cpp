@@ -2,7 +2,6 @@
 #include <map>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
 #include "AssetManager.h"
@@ -58,13 +57,6 @@ bool Initialize()
     g_simpleShader = new Shader;
     g_simpleShader->Initialize("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
     g_simpleShader->Use();
-    
-    // MATRIX STUFF
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1080.0f/720.0f, 0.1f, 100.0f);
-    // glm::mat4 projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.1f, 100.0f);
-    
-    g_simpleShader->SetMatrix4("projection", projection);
-    g_simpleShader->SetVec3("color", {1.0f, 1.0f, 1.0f});
     
     // MESHES
     AssetManager* asset_manager = new AssetManager;
@@ -140,9 +132,10 @@ void Logic()
     
     // Camera
     if (g_input_manager->IsKeyJustPressed(GLFW_KEY_F))
-    {
         g_input_manager->IsFocused(!g_input_manager->IsFocused());
-    }
+
+    if (g_input_manager->IsKeyJustPressed(GLFW_KEY_F4))
+        g_camera->SetIsOrthographic(!g_camera->IsOrthographic());
 
     if (g_input_manager->IsFocused())
     {
@@ -162,6 +155,8 @@ void Render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.1f, 0.17f, 0.34f, 1.0f);
+    
+    g_simpleShader->SetMatrix4("projection", g_camera->GetProjection());
     
     for (auto& mesh : g_meshes)
         mesh->Draw();

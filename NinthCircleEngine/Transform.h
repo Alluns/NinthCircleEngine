@@ -12,8 +12,11 @@ public:
     
 public:
     Transform();
-    
     Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+    
+    Transform operator+(const Transform& other) const;
+
+    static Transform zero() { return {{0, 0, 0}, {0, 0, 0}, {1, 1, 1}}; }
 
     glm::mat4 To4xMatrix();
 };

@@ -16,6 +16,15 @@ Transform::Transform(const glm::vec3 position, const glm::vec3 rotation, const g
     m_scale = scale;
 }
 
+Transform Transform::operator+(const Transform& other) const
+{
+    return {
+        {this->m_position + other.m_position},
+        {this->m_rotation + other.m_rotation},
+        {this->m_scale + other.m_scale}
+    };
+}
+
 glm::mat4 Transform::To4xMatrix()
 {
     glm::mat4 matrix = glm::mat4(1.0f);
