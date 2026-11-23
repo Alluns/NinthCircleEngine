@@ -16,5 +16,5 @@ protected:
 public:
     PlayerController(InputManager* input_manager);
     
-    void update(const float delta_time);
+    void Update(float delta_time) override;
 };

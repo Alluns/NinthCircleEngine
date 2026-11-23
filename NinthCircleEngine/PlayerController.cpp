@@ -8,7 +8,7 @@ PlayerController::PlayerController(InputManager* input_manager)
     m_input_manager = input_manager;
 }
 
-void PlayerController::update(const float delta_time)
+void PlayerController::Update(const float delta_time)
 {
     if (!m_input_manager->IsFocused()) { return; }
     

@@ -18,6 +18,7 @@ public:
     virtual ~Object();
     
     virtual void Update(const float delta_time) {}
+    virtual void Draw() {}
     
     glm::vec3 Forward() const { return m_forward; }
     void SetForward(glm::vec3 direction) { m_forward = direction; }

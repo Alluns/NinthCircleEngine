@@ -3,8 +3,9 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
-Camera::Camera(int width, int height)
+Camera::Camera(InputManager* input_manager, int width, int height)
 {
+    m_input_manager = input_manager;
     m_width = width;
     m_height = height;
 }
@@ -19,4 +20,10 @@ glm::mat4 Camera::GetProjection()
     if (m_is_orthographic) { return glm::ortho(-AspectRatio(), AspectRatio(), -1.0f, 1.0f, 0.1f, 100.0f); }
     
     return glm::perspective(glm::radians(45.0f), AspectRatio(), 0.1f, 100.0f);
+}
+
+void Camera::Update(const float delta_time)
+{
+    if (m_input_manager->IsKeyJustPressed(GLFW_KEY_F4))
+        SetIsOrthographic(!m_is_orthographic);
 }

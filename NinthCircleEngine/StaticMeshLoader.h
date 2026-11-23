@@ -7,6 +7,6 @@
 
 class StaticMeshLoader
 {
-public:    
+public:
     static std::vector<StaticMesh*> LoadMeshFile(const std::string& path);
 };

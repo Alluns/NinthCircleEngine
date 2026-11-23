@@ -1,13 +1,13 @@
 #include "Mesh.h"
 
-Mesh::Mesh(Transform transform, std::vector<StaticMesh*> static_meshes, Shader* shader)
+Mesh::Mesh(const Transform& transform, const std::vector<StaticMesh*>& static_meshes, Shader* shader)
 {
     SetTransform(transform);
     m_static_meshes = static_meshes;
     m_shader = shader;
 }
 
-Mesh::Mesh(Transform transform, StaticMesh* static_mesh, Shader* shader)
+Mesh::Mesh(const Transform& transform, StaticMesh* static_mesh, Shader* shader)
 {
     SetTransform(transform);
     m_static_meshes = {static_mesh};

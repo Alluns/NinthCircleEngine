@@ -13,8 +13,8 @@ private:
     glm::mat4  m_transMat;
     
 public:
-    Mesh(Transform transform, std::vector<StaticMesh*> static_meshes, Shader* shader);
-    Mesh(Transform transform, StaticMesh* static_mesh, Shader* shader);
+    Mesh(const Transform& transform, const std::vector<StaticMesh*>& static_meshes, Shader* shader);
+    Mesh(const Transform& transform, StaticMesh* static_mesh, Shader* shader);
     
-    void Draw();
+    void Draw() override;
 };
