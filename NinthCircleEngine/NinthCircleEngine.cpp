@@ -94,7 +94,7 @@ bool Initialize()
     return true;
 }
 
-void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     g_input_manager->KeyCallback(window, key, scancode, action, mods);
 }
@@ -134,10 +134,19 @@ bool InitializeOpenGL()
 
 void Logic()
 {
-    // Calculate delta time
+    // Delta time
     const float current_frame = static_cast<float>(glfwGetTime());
     g_delta_time = current_frame - g_last_frame;
     g_last_frame = current_frame;
+    
+    // Viewport
+    if (g_input_manager->IsKeyJustPressed(GLFW_KEY_F11))
+    {
+        if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_MAXIMIZED))
+            glfwRestoreWindow(glfwGetCurrentContext());
+        else
+            glfwMaximizeWindow(glfwGetCurrentContext());
+    }
     
     // Input Manager
     if (g_input_manager->IsKeyJustPressed(GLFW_KEY_F))
@@ -148,6 +157,10 @@ void Logic()
     {
         Camera* camera = new Camera(g_input_manager, g_window_width, g_window_height);
         g_objects.emplace_back(camera);
+        
+        PlayerController* player_controller = new PlayerController(g_input_manager);
+        player_controller->SetParent(camera);
+        g_objects.emplace_back(player_controller);
     }
     
     // Objects
@@ -168,20 +181,20 @@ void Render()
 
     if (!cameras.empty())
     {
-        int columns = static_cast<int>(floor(sqrt(cameras.size() - 1))) + 1;
-        int rows = static_cast<int>(ceil(static_cast<double>(cameras.size()) / static_cast<double>(columns)));
+        const int columns = static_cast<int>(floor(sqrt(cameras.size() - 1))) + 1;
+        const int rows = static_cast<int>(ceil(static_cast<double>(cameras.size()) / static_cast<double>(columns)));
         
         int window_width;
         int window_height;
         glfwGetWindowSize(glfwGetCurrentContext(), &window_width, &window_height);
-        
-        int viewport_width = window_width / columns;
-        int viewport_height = window_height / rows;
+
+        const int viewport_width = window_width / columns;
+        const int viewport_height = window_height / rows;
         
         for (int i = 0; i < cameras.size(); ++i)
         {
-            int x = i % columns;
-            int y = (i - x) / rows;
+            const int x = i % columns;
+            const int y = (i - x) / rows;
             
             glViewport(x * viewport_width, y * viewport_height, viewport_width, viewport_height);
             cameras[i]->SetResolution(viewport_width, viewport_height);

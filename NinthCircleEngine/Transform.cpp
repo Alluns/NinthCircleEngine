@@ -21,7 +21,7 @@ Transform Transform::operator+(const Transform& other) const
     return {
         {this->m_position + other.m_position},
         {this->m_rotation + other.m_rotation},
-        {this->m_scale + other.m_scale}
+        {this->m_scale * other.m_scale}
     };
 }
 

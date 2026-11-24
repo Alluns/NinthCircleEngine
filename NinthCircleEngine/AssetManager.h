@@ -8,13 +8,21 @@
 
 class AssetManager
 {
-private:
+    static AssetManager* m_singleton;
+    
     // TODO: Add support for shaders
     std::map<std::string, StaticMesh*> m_static_meshes;
     std::map<std::string, Texture*>    m_textures;
     
 public:
     ~AssetManager();
+    
+    static AssetManager* GetInstance()
+    {
+        if (!m_singleton) { m_singleton = new AssetManager; }
+    
+        return m_singleton;
+    }
     
     // TODO: Add support for shaders
     std::vector<StaticMesh*> LoadStaticMeshes(const std::string& path);

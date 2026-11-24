@@ -7,14 +7,14 @@ Object::~Object()
         delete child;
 }
 
-Transform Object::GetTransform() { return m_parent ? m_parent->GetTransform() + GetLocalTransform() : GetLocalTransform(); }
-
-glm::vec3 Object::GetPosition() { return m_parent ? m_parent->GetPosition() + GetLocalPosition() : GetLocalPosition(); }
-glm::vec3 Object::GetRotation() { return m_parent ? m_parent->GetRotation() + GetLocalRotation() : GetLocalRotation(); }
-glm::vec3 Object::GetScale() { return m_parent ? m_parent->GetScale() + GetLocalScale() : GetLocalScale(); }
+Transform Object::GetTransform() const { return m_parent ? m_parent->GetTransform() + GetLocalTransform() : GetLocalTransform(); }
+glm::vec3 Object::GetPosition()  const { return m_parent ? m_parent->GetPosition()  + GetLocalPosition()  : GetLocalPosition(); }
+glm::vec3 Object::GetRotation()  const { return m_parent ? m_parent->GetRotation()  + GetLocalRotation()  : GetLocalRotation(); }
+glm::vec3 Object::GetScale()     const { return m_parent ? m_parent->GetScale()     + GetLocalScale()     : GetLocalScale(); }
 
 
 Object* Object::GetRootParent() { return m_parent ? m_parent->GetRootParent() : this; }
+
 
 void Object::SetParent(Object* object)
 {
