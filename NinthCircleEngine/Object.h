@@ -7,20 +7,20 @@
 class Object
 {
     Transform m_transform = Transform::zero();
-    std::string m_name;
+    std::string m_name = "Unnamed";
     
     glm::vec3 m_forward  = {0, 0, -1.0f};
     glm::vec3 m_up       = {0, 1.0f, 0};
     glm::vec3 m_right    = {1.0f, 0, 0};
     
     Object* m_parent = nullptr;
-    std::vector<Object*> m_children;
+    std::vector<Object*> m_children = {};
     
 public:
     virtual ~Object();
     
-    virtual void Update(const float delta_time) {}
-    virtual void Draw() {}
+    virtual void Update(const float delta_time);
+    virtual void Draw();
     
     glm::vec3 Forward() const { return m_forward; }
     glm::vec3 Right()   const { return m_right; }
@@ -70,13 +70,15 @@ private:
 template <typename T>
 T* Object::GetFirstOfType()
 {
-    if (typeid(this) == typeid(T)) { return static_cast<T*>(this); }
+    if (typeid(*this) == typeid(T)) { return static_cast<T*>(this); }
 
-    for (Object* const& child : GetAllChildren())
-        if (typeid(child) == typeid(T))
+    if (m_children.empty()) { return nullptr; }
+
+    for (Object* child : GetAllChildren())
+        if (typeid(*child) == typeid(T))
             return static_cast<T*>(child);
         
-    for (Object* const& child : GetAllChildren())
+    for (Object* child : GetAllChildren())
         if (T* object = child->GetFirstOfType<T>())
             return object;
 

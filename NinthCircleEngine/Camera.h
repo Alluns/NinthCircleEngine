@@ -1,7 +1,6 @@
 #pragma once
 #include <glm/ext/matrix_float4x4.hpp>
 
-#include "InputManager.h"
 #include "Object.h"
 
 class Camera: public Object
@@ -9,13 +8,12 @@ class Camera: public Object
 protected:
     bool m_is_orthographic = false;
     
-    InputManager* m_input_manager;
-    
     int m_width = 0;
     int m_height = 0;
     
 public:
-    Camera(InputManager* input_manager, int width, int height);
+    Camera();
+    Camera(int width, int height);
     
     glm::mat4 GetView();
     glm::mat4 GetProjection();

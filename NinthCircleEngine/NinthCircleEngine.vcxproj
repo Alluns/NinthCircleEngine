@@ -248,6 +248,7 @@
       <AdditionalIncludeDirectories>C:\Users\allan.backman\Documents\NinthCircleEngine\Dependencies\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="NinthCircleEngineContext.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="StaticMesh.cpp">
@@ -343,6 +344,7 @@
     <ClInclude Include="Debugging.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="NinthCircleEngineContext.h" />
     <ClInclude Include="OBJ-Loader\OBJ_Loader.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PlayerController.h" />

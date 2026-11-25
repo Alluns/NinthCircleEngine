@@ -2,10 +2,17 @@
 
 #include <ranges>
 
-InputManager::InputManager(GLFWwindow* window, const int width, const int height)
+InputManager::InputManager()
 {
-    m_window = window;
-    m_mouse_position = {static_cast<float>(width) / 2.0f, static_cast<float>(height) / 2.0f};
+    GLFWwindow* window = glfwGetCurrentContext();
+    
+    int window_width;
+    int window_height;
+    glfwGetWindowSize(window, &window_width, &window_height);
+    
+    m_mouse_position = {static_cast<float>(window_width) / 2.0f, static_cast<float>(window_height) / 2.0f};
+    
+    glfwSetKeyCallback(window, StaticKeyCallback);
 }
 
 void InputManager::Update()
@@ -18,8 +25,13 @@ void InputManager::Update()
     // MOUSE
     glm::dvec2 last_mouse_position = m_mouse_position;
     
-    glfwGetCursorPos(m_window, &m_mouse_position.x, &m_mouse_position.y);
+    glfwGetCursorPos(glfwGetCurrentContext(), &m_mouse_position.x, &m_mouse_position.y);
     m_mouse_delta = m_mouse_position - last_mouse_position;
+}
+
+void InputManager::StaticKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    GetInstance()->KeyCallback(window, key, scancode, action, mods);
 }
 
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -35,7 +47,7 @@ void InputManager::IsFocused(bool value)
     m_is_focused = value;
     
     if (m_is_focused)
-        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     else
-        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }

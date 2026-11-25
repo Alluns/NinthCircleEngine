@@ -1,11 +1,18 @@
 #include "Camera.h"
 
+#include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
-Camera::Camera(InputManager* input_manager, int width, int height)
+#include "InputManager.h"
+
+Camera::Camera()
 {
-    m_input_manager = input_manager;
+    glfwGetWindowSize(glfwGetCurrentContext(), &m_width, &m_height);
+}
+
+Camera::Camera(const int width, const int height)
+{
     m_width = width;
     m_height = height;
 }
@@ -24,6 +31,8 @@ glm::mat4 Camera::GetProjection()
 
 void Camera::Update(const float delta_time)
 {
-    if (m_input_manager->IsKeyJustPressed(GLFW_KEY_F4))
+    Object::Update(delta_time);
+    
+    if (InputManager::GetInstance()->IsKeyJustPressed(GLFW_KEY_F4))
         SetIsOrthographic(!m_is_orthographic);
 }

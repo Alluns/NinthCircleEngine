@@ -1,12 +1,9 @@
 #pragma once
-#include "InputManager.h"
 #include "Object.h"
 
 class PlayerController : public Object
 {
 protected:
-    InputManager* m_input_manager = nullptr;
-    
     float m_speed = 8.0f;
     float m_mouse_sensitivity = 0.1f;
     
@@ -14,7 +11,8 @@ protected:
     float yaw = -90.0f;
     
 public:
-    PlayerController(InputManager* input_manager);
+    PlayerController() = default;
+    PlayerController(Object* parent_object);
     
     void Update(float delta_time) override;
 };

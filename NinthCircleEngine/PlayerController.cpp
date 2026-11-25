@@ -3,20 +3,24 @@
 #include <algorithm>
 #include <glm/trigonometric.hpp>
 
-PlayerController::PlayerController(InputManager* input_manager)
+#include "InputManager.h"
+
+PlayerController::PlayerController(Object* parent_object)
 {
-    m_input_manager = input_manager;
+    this->SetParent(parent_object);
 }
 
 void PlayerController::Update(const float delta_time)
 {
-    if (!m_input_manager->IsFocused()) { return; }
+    Object::Update(delta_time);
+    
+    if (!InputManager::GetInstance()->IsFocused()) { return; }
     
     Object* root_parent = GetRootParent();
     
     
     // ROTATION
-    glm::dvec2 delta = m_input_manager->GetMouseDelta();
+    glm::dvec2 delta = InputManager::GetInstance()->GetMouseDelta();
     
     delta *= m_mouse_sensitivity;
     
@@ -36,9 +40,9 @@ void PlayerController::Update(const float delta_time)
     
     // POSITION
     glm::vec3 input_direction = {
-        m_input_manager->IsKeyPressed(GLFW_KEY_W) - m_input_manager->IsKeyPressed(GLFW_KEY_S),
-        m_input_manager->IsKeyPressed(GLFW_KEY_SPACE) - m_input_manager->IsKeyPressed(GLFW_KEY_LEFT_CONTROL),
-        m_input_manager->IsKeyPressed(GLFW_KEY_D) - m_input_manager->IsKeyPressed(GLFW_KEY_A)
+        InputManager::GetInstance()->IsKeyPressed(GLFW_KEY_W) - InputManager::GetInstance()->IsKeyPressed(GLFW_KEY_S),
+        InputManager::GetInstance()->IsKeyPressed(GLFW_KEY_SPACE) - InputManager::GetInstance()->IsKeyPressed(GLFW_KEY_LEFT_CONTROL),
+        InputManager::GetInstance()->IsKeyPressed(GLFW_KEY_D) - InputManager::GetInstance()->IsKeyPressed(GLFW_KEY_A)
     };
 
     if (length(input_direction) > 0.01f)

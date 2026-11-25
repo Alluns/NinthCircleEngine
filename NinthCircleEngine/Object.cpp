@@ -7,6 +7,18 @@ Object::~Object()
         delete child;
 }
 
+void Object::Update(const float delta_time)
+{
+    for (Object*& child : m_children)
+        child->Update(delta_time);
+}
+
+void Object::Draw()
+{
+    for (Object*& child : m_children)
+        child->Draw();
+}
+
 Transform Object::GetTransform() const { return m_parent ? m_parent->GetTransform() + GetLocalTransform() : GetLocalTransform(); }
 glm::vec3 Object::GetPosition()  const { return m_parent ? m_parent->GetPosition()  + GetLocalPosition()  : GetLocalPosition(); }
 glm::vec3 Object::GetRotation()  const { return m_parent ? m_parent->GetRotation()  + GetLocalRotation()  : GetLocalRotation(); }
