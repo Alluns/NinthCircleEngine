@@ -54,7 +54,31 @@ public:
     
     std::vector<Object*> GetAllChildren() { return m_children; }
     void RemoveChild(const Object* object);
+
+    /**
+     * 
+     * @tparam T
+     * @return Returns the first object attached to, and including, this object of type 'T'. Otherwise, returns 'nullptr'.
+     */
+    template <typename T>
+    T* GetFirstOfType();
     
 private:
     void AddChild(Object* object);
 };
+
+template <typename T>
+T* Object::GetFirstOfType()
+{
+    if (typeid(this) == typeid(T)) { return static_cast<T*>(this); }
+
+    for (Object* const& child : GetAllChildren())
+        if (typeid(child) == typeid(T))
+            return static_cast<T*>(child);
+        
+    for (Object* const& child : GetAllChildren())
+        if (T* object = child->GetFirstOfType<T>())
+            return object;
+
+    return nullptr;
+}
