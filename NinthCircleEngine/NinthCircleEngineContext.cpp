@@ -51,14 +51,11 @@ bool NinthCircleEngineContext::InitializeEngine()
     
     // TODO: TEMP!!! Just to make sure meshes work
     
-    // SHADERS
-    shader = new Shader;
-    shader->Initialize("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
-    shader->Use();
+    AssetManager::GetInstance()->LoadShader("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
     
     AssetManager* asset_manager = AssetManager::GetInstance();
     
-    mesh = new Mesh({}, asset_manager->LoadStaticMeshes("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj"), shader);
+    mesh = new Mesh({}, asset_manager->LoadStaticMeshes("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj"), AssetManager::GetInstance()->GetAllShaders().at("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glslC:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl"));
 
     for (auto& static_mesh : mesh->m_static_meshes)
     {
@@ -117,8 +114,6 @@ void NinthCircleEngineContext::Logic()
     {
         InputManager::GetInstance()->IsFocused(!InputManager::GetInstance()->IsFocused());
     }
-    
-    std::cout << "x: " << GetRoot()->GetPosition().x << "\n";
 }
 
 void NinthCircleEngineContext::Render()
@@ -134,8 +129,11 @@ void NinthCircleEngineContext::Render()
         
         if (camera)
         {
-            shader->SetMatrix4("projection", camera->GetProjection());
-            shader->SetMatrix4("view", camera->GetView());
+            for (auto& [path, shader] : AssetManager::GetInstance()->GetAllShaders())
+            {
+                shader->SetMatrix4("projection", camera->GetProjection());
+                shader->SetMatrix4("view", camera->GetView());
+            }
             
             if (GetRoot())
                 GetRoot()->Draw();

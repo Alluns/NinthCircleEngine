@@ -72,6 +72,11 @@ unsigned int Shader::LoadFragmentShader(const char* aPath)
     return fragmentShader;
 }
 
+Shader::Shader(const std::string& vertex_path, const std::string& fragment_path)
+{
+    Initialize(vertex_path.c_str(), fragment_path.c_str());
+}
+
 void Shader::Initialize(const char* aVertexPath, const char* aFragmentPath)
 {
     int result;
@@ -80,22 +85,22 @@ void Shader::Initialize(const char* aVertexPath, const char* aFragmentPath)
     unsigned int vertexShader = LoadVertexShader(aVertexPath);
     unsigned int fragmentShader = LoadFragmentShader(aFragmentPath);
     
-    aShaderProgram = glCreateProgram();
+    m_shader_program = glCreateProgram();
     
-    glAttachShader(aShaderProgram, vertexShader);
-    glAttachShader(aShaderProgram, fragmentShader);
-    glLinkProgram(aShaderProgram);
+    glAttachShader(m_shader_program, vertexShader);
+    glAttachShader(m_shader_program, fragmentShader);
+    glLinkProgram(m_shader_program);
     
-    glGetProgramiv(aShaderProgram, GL_LINK_STATUS, &result);
+    glGetProgramiv(m_shader_program, GL_LINK_STATUS, &result);
     
     if (!result)
     {
-        glGetProgramInfoLog(aShaderProgram, 512, NULL, log);
+        glGetProgramInfoLog(m_shader_program, 512, NULL, log);
         std::cout << "Shader program failed to compile\n" << log << '\n';
     }
     
-    glDetachShader(aShaderProgram, vertexShader);
-    glDetachShader(aShaderProgram, fragmentShader);
+    glDetachShader(m_shader_program, vertexShader);
+    glDetachShader(m_shader_program, fragmentShader);
     
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -105,17 +110,17 @@ void Shader::Initialize(const char* aVertexPath, const char* aFragmentPath)
 
 void Shader::Use()
 {
-    glUseProgram(aShaderProgram);
+    glUseProgram(m_shader_program);
     
     glCheckError();
 }
 
 void Shader::SetMatrix4(const std::string& aUniformName, glm::mat4 aMatrix)
 {
-    glUniformMatrix4fv(glGetUniformLocation(aShaderProgram, aUniformName.c_str()), 1, GL_FALSE, glm::value_ptr(aMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(m_shader_program, aUniformName.c_str()), 1, GL_FALSE, glm::value_ptr(aMatrix));
 }
 
 void Shader::SetVec3(const std::string& aUniformName, glm::vec3 aColor)
 {
-    glUniform3f(glGetUniformLocation(aShaderProgram, aUniformName.c_str()), aColor.r, aColor.g, aColor.b);
+    glUniform3f(glGetUniformLocation(m_shader_program, aUniformName.c_str()), aColor.r, aColor.g, aColor.b);
 }

@@ -15,7 +15,6 @@ class NinthCircleEngineContext
     
     Object* m_root = nullptr;
     
-    Shader* shader;
     Mesh* mesh;
     
 private:

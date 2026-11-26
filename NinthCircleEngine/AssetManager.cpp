@@ -41,3 +41,13 @@ Texture* AssetManager::LoadTexture(const std::string& path)
     
     return texture;
 }
+
+Shader* AssetManager::LoadShader(const std::string& vertex_path, const std::string& fragment_path)
+{
+    if (m_shaders.contains(vertex_path + fragment_path)) { return m_shaders[vertex_path + fragment_path]; }
+    
+    Shader* shader = new Shader(vertex_path, fragment_path);
+    m_shaders.insert({vertex_path + fragment_path, shader});
+    
+    return shader;
+}
