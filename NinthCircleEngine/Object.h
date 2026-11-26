@@ -19,7 +19,7 @@ class Object
 public:
     virtual ~Object();
     
-    virtual void Update(const float delta_time);
+    virtual void Update(float delta_time);
     virtual void Draw();
     
     glm::vec3 Forward() const { return m_forward; }

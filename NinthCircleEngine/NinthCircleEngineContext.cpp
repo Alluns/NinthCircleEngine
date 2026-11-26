@@ -39,9 +39,6 @@ bool NinthCircleEngineContext::InitializeGLAD()
 
 bool NinthCircleEngineContext::InitializeEngine()
 {
-    InputManager::GetInstance();
-    AssetManager::GetInstance();
-    
     // Get the working directory path
     m_root_path =  std::filesystem::current_path().string();
     std::ranges::replace(m_root_path, '\\', '/');
@@ -54,15 +51,13 @@ bool NinthCircleEngineContext::InitializeEngine()
     PlayerController* pc = new PlayerController();
     pc->SetParent(camera);
     
-    
-    std::cout << "root path: " << GetRootPath() << "\n";
-    
-    AssetManager::GetInstance()->LoadShader(m_root_path + "/assets/shaders/simpleShader.vert.glsl", m_root_path + "/assets/shaders/simpleShader.frag.glsl");
-    
     AssetManager* asset_manager = AssetManager::GetInstance();
     
-    mesh = new Mesh({}, asset_manager->LoadStaticMeshes(m_root_path + "/assets/static_meshes/soule.obj"), AssetManager::GetInstance()->GetAllShaders().at(m_root_path + "/assets/shaders/simpleShader.vert.glsl" + m_root_path + "/assets/shaders/simpleShader.frag.glsl"));
-
+    asset_manager->LoadShader(m_root_path + "/assets/shaders/simpleShader.vert.glsl", m_root_path + "/assets/shaders/simpleShader.frag.glsl");
+    
+    Mesh* mesh = new Mesh({}, asset_manager->LoadStaticMeshes(m_root_path + "/assets/static_meshes/soule.obj"), AssetManager::GetInstance()->GetAllShaders().at(m_root_path + "/assets/shaders/simpleShader.vert.glsl" + m_root_path + "/assets/shaders/simpleShader.frag.glsl"));
+    mesh->SetParent(camera);
+    
     for (auto& static_mesh : mesh->m_static_meshes)
     {
         // TODO: Make this the default texture for any static_mesh without one (nullptr)
@@ -81,7 +76,6 @@ bool NinthCircleEngineContext::InitializeEngine()
     
     return true;
 }
-
 
 void NinthCircleEngineContext::Update()
 {
@@ -106,10 +100,6 @@ void NinthCircleEngineContext::Logic()
     int window_width;
     int window_height;
     glfwGetWindowSize(glfwGetCurrentContext(), &window_width, &window_height);
-    
-    // Update objects
-    if (GetRoot())
-        GetRoot()->Update(DeltaTime());
 
     // Check if we should close the engine
     if (InputManager::GetInstance()->IsKeyJustPressed(GLFW_KEY_F10)) { Exit(); }
@@ -117,9 +107,11 @@ void NinthCircleEngineContext::Logic()
     
     // TODO: Create a 'Viewport' class to handle this instead
     if (InputManager::GetInstance()->IsKeyJustPressed(GLFW_KEY_F))
-    {
         InputManager::GetInstance()->IsFocused(!InputManager::GetInstance()->IsFocused());
-    }
+    
+    // Update objects
+    if (GetRoot())
+        GetRoot()->Update(DeltaTime());
 }
 
 void NinthCircleEngineContext::Render()
@@ -131,9 +123,7 @@ void NinthCircleEngineContext::Render()
     // TODO: Make object render use depth first to begin with the deepest child and then work backwards
     if (Object* root = GetRoot())
     {
-        Camera* camera = root->GetFirstOfType<Camera>();
-        
-        if (camera)
+        if (Camera* camera = root->GetFirstOfType<Camera>())
         {
             for (auto& [path, shader] : AssetManager::GetInstance()->GetAllShaders())
             {
@@ -143,13 +133,11 @@ void NinthCircleEngineContext::Render()
             
             if (GetRoot())
                 GetRoot()->Draw();
-            mesh->Draw();
         }
     }
     
     glfwSwapBuffers(glfwGetCurrentContext());
 }
-
 
 void NinthCircleEngineContext::Start()
 {

@@ -46,10 +46,10 @@ StaticMesh::~StaticMesh()
     if (m_VAO) glDeleteVertexArrays(1, &m_VAO);
 }
 
-void StaticMesh::Draw(Shader* aShader, glm::mat4 transMat)
+void StaticMesh::Draw(Shader* shader, glm::mat4 transform_matrix)
 {
-    aShader->SetMatrix4("transform", transMat);
-    aShader->Use();
+    shader->SetMatrix4("transform", transform_matrix);
+    shader->Use();
 
     m_texture->Use();
     

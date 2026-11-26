@@ -24,15 +24,15 @@ void PlayerController::Update(const float delta_time)
     
     delta *= m_mouse_sensitivity;
     
-    yaw   += delta.x;
-    pitch -= delta.y;
+    m_yaw   += delta.x;
+    m_pitch -= delta.y;
     
-    pitch = std::clamp(pitch, -89.0f, 89.0f);
+    m_pitch = std::clamp(m_pitch, -89.0f, 89.0f);
     
     glm::vec3 mouse_direction;
-    mouse_direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    mouse_direction.y = sin(glm::radians(pitch));
-    mouse_direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    mouse_direction.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+    mouse_direction.y = sin(glm::radians(m_pitch));
+    mouse_direction.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
     
     root_parent->SetForward(glm::normalize(mouse_direction));
     root_parent->SetRight(glm::normalize(glm::cross(root_parent->Forward(), root_parent->Up())));

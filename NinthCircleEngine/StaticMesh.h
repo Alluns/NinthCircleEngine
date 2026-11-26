@@ -34,5 +34,5 @@ public:
     
     void InitializeMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
     
-    void Draw(Shader* aShader, glm::mat4 transMat);
+    void Draw(Shader* shader, glm::mat4 transform_matrix);
 };

@@ -7,11 +7,11 @@
 //https://learnopengl.com/In-Practice/Debugging
 inline GLenum glCheckError_(const char *file, int line)
 {
-    GLenum errorCode;
-    while ((errorCode = glGetError()) != GL_NO_ERROR)
+    GLenum error_code;
+    while ((error_code = glGetError()) != GL_NO_ERROR)
     {        
         std::string error;
-        switch (errorCode)
+        switch (error_code)
         {
         case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
         case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
@@ -23,6 +23,6 @@ inline GLenum glCheckError_(const char *file, int line)
         }
         std::cout << error << " | " << file << " (" << line << ")" << '\n';
     }
-    return errorCode;
+    return error_code;
 }
 #define glCheckError() glCheckError_(__FILE__, __LINE__) 

@@ -2,7 +2,6 @@
 
 #include <filesystem>
 
-#include "Mesh.h"
 #include "Object.h"
 
 class NinthCircleEngineContext
@@ -14,9 +13,7 @@ class NinthCircleEngineContext
     float m_last_frame = 0.0f;
     double m_engine_time_milliseconds = 0.0f; 
     
-    Object* m_root = nullptr;
-    
-    Mesh* mesh;
+    Object* m_root = new Object;
     
     std::string m_root_path;
     

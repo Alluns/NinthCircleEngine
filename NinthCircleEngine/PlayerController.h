@@ -7,8 +7,8 @@ protected:
     float m_speed = 8.0f;
     float m_mouse_sensitivity = 0.1f;
     
-    float pitch = 0.0f;
-    float yaw = -90.0f;
+    float m_pitch = 0.0f;
+    float m_yaw = -90.0f;
     
 public:
     PlayerController() = default;

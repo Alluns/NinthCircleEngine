@@ -6,12 +6,12 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-std::string Shader::LoadShader(const char* aPath)
+std::string Shader::LoadShader(const char* path)
 {
     std::string shaderCode;
     std::ifstream shaderFile;
     
-    shaderFile.open(aPath);
+    shaderFile.open(path);
     
     std::stringstream shaderStream;
     shaderStream << shaderFile.rdbuf();
@@ -22,12 +22,12 @@ std::string Shader::LoadShader(const char* aPath)
     return shaderCode;
 }
 
-unsigned int Shader::LoadVertexShader(const char* aPath)
+unsigned int Shader::LoadVertexShader(const char* path)
 {
     int result;
     char log[512];
     
-    std::string shaderCodeString = LoadShader(aPath);
+    std::string shaderCodeString = LoadShader(path);
     const char* shaderCode = shaderCodeString.c_str();
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     
@@ -47,12 +47,12 @@ unsigned int Shader::LoadVertexShader(const char* aPath)
     return vertexShader;
 }
 
-unsigned int Shader::LoadFragmentShader(const char* aPath)
+unsigned int Shader::LoadFragmentShader(const char* path)
 {
     int result;
     char log[512];
     
-    std::string shaderCodeString = LoadShader(aPath);
+    std::string shaderCodeString = LoadShader(path);
     const char* shaderCode = shaderCodeString.c_str();
     unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     
@@ -77,18 +77,18 @@ Shader::Shader(const std::string& vertex_path, const std::string& fragment_path)
     Initialize(vertex_path.c_str(), fragment_path.c_str());
 }
 
-void Shader::Initialize(const char* aVertexPath, const char* aFragmentPath)
+void Shader::Initialize(const char* vertex_path, const char* fragment_path)
 {
     int result;
     char log[512];
     
-    unsigned int vertexShader = LoadVertexShader(aVertexPath);
-    unsigned int fragmentShader = LoadFragmentShader(aFragmentPath);
+    unsigned int vertex_shader = LoadVertexShader(vertex_path);
+    unsigned int fragment_shader = LoadFragmentShader(fragment_path);
     
     m_shader_program = glCreateProgram();
     
-    glAttachShader(m_shader_program, vertexShader);
-    glAttachShader(m_shader_program, fragmentShader);
+    glAttachShader(m_shader_program, vertex_shader);
+    glAttachShader(m_shader_program, fragment_shader);
     glLinkProgram(m_shader_program);
     
     glGetProgramiv(m_shader_program, GL_LINK_STATUS, &result);
@@ -99,11 +99,11 @@ void Shader::Initialize(const char* aVertexPath, const char* aFragmentPath)
         std::cout << "Shader program failed to compile\n" << log << '\n';
     }
     
-    glDetachShader(m_shader_program, vertexShader);
-    glDetachShader(m_shader_program, fragmentShader);
+    glDetachShader(m_shader_program, vertex_shader);
+    glDetachShader(m_shader_program, fragment_shader);
     
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
     
     glCheckError();
 }
@@ -115,9 +115,9 @@ void Shader::Use()
     glCheckError();
 }
 
-void Shader::SetMatrix4(const std::string& aUniformName, glm::mat4 aMatrix)
+void Shader::SetMatrix4(const std::string& uniform_name, glm::mat4 matrix)
 {
-    glUniformMatrix4fv(glGetUniformLocation(m_shader_program, aUniformName.c_str()), 1, GL_FALSE, glm::value_ptr(aMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(m_shader_program, uniform_name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Shader::SetVec3(const std::string& aUniformName, glm::vec3 aColor)
