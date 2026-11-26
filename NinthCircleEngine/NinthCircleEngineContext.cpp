@@ -42,6 +42,11 @@ bool NinthCircleEngineContext::InitializeEngine()
     InputManager::GetInstance();
     AssetManager::GetInstance();
     
+    // Get the working directory path
+    m_root_path =  std::filesystem::current_path().string();
+    std::ranges::replace(m_root_path, '\\', '/');
+    
+    // TODO: Remove this when scene loading has been implemented
     Camera* camera = new Camera();
     
     SetRoot(camera);
@@ -49,29 +54,30 @@ bool NinthCircleEngineContext::InitializeEngine()
     PlayerController* pc = new PlayerController();
     pc->SetParent(camera);
     
-    // TODO: TEMP!!! Just to make sure meshes work
     
-    AssetManager::GetInstance()->LoadShader("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glsl", "C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl");
+    std::cout << "root path: " << GetRootPath() << "\n";
+    
+    AssetManager::GetInstance()->LoadShader(m_root_path + "/assets/shaders/simpleShader.vert.glsl", m_root_path + "/assets/shaders/simpleShader.frag.glsl");
     
     AssetManager* asset_manager = AssetManager::GetInstance();
     
-    mesh = new Mesh({}, asset_manager->LoadStaticMeshes("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/static_meshes/soule.obj"), AssetManager::GetInstance()->GetAllShaders().at("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.vert.glslC:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/shaders/simpleShader.frag.glsl"));
+    mesh = new Mesh({}, asset_manager->LoadStaticMeshes(m_root_path + "/assets/static_meshes/soule.obj"), AssetManager::GetInstance()->GetAllShaders().at(m_root_path + "/assets/shaders/simpleShader.vert.glsl" + m_root_path + "/assets/shaders/simpleShader.frag.glsl"));
 
     for (auto& static_mesh : mesh->m_static_meshes)
     {
         // TODO: Make this the default texture for any static_mesh without one (nullptr)
-        static_mesh->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/missing_texture.png");
+        static_mesh->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/missing_texture.png");
     }
     
-    mesh->m_static_meshes[0]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Dress.png");
-    mesh->m_static_meshes[1]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/white.png");
-    mesh->m_static_meshes[2]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Eyes.png");
-    mesh->m_static_meshes[3]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Tail.png");
-    mesh->m_static_meshes[4]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Pumps.png");
-    mesh->m_static_meshes[5]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Horns.png");
-    mesh->m_static_meshes[6]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Hair.png");
-    mesh->m_static_meshes[7]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/soule/Body.png");
-    mesh->m_static_meshes[8]->m_texture = asset_manager->LoadTexture("C:/Users/allan/Documents/NinthCircleEngine/NinthCircleEngine/assets/textures/black.png");
+    mesh->m_static_meshes[0]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/soule/Dress.png");
+    mesh->m_static_meshes[1]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/white.png");
+    mesh->m_static_meshes[2]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/soule/Eyes.png");
+    mesh->m_static_meshes[3]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/soule/Tail.png");
+    mesh->m_static_meshes[4]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/soule/Pumps.png");
+    mesh->m_static_meshes[5]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/soule/Horns.png");
+    mesh->m_static_meshes[6]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/soule/Hair.png");
+    mesh->m_static_meshes[7]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/soule/Body.png");
+    mesh->m_static_meshes[8]->m_texture = asset_manager->LoadTexture(m_root_path + "/assets/textures/black.png");
     
     return true;
 }

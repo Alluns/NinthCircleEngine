@@ -49,5 +49,7 @@ Shader* AssetManager::LoadShader(const std::string& vertex_path, const std::stri
     Shader* shader = new Shader(vertex_path, fragment_path);
     m_shaders.insert({vertex_path + fragment_path, shader});
     
+    shader->Use();
+    
     return shader;
 }

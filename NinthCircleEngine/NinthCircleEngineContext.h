@@ -1,8 +1,9 @@
 #pragma once
 
+#include <filesystem>
+
 #include "Mesh.h"
 #include "Object.h"
-#include "Shader.h"
 
 class NinthCircleEngineContext
 {
@@ -16,6 +17,8 @@ class NinthCircleEngineContext
     Object* m_root = nullptr;
     
     Mesh* mesh;
+    
+    std::string m_root_path;
     
 private:
     NinthCircleEngineContext() = default;
@@ -49,4 +52,6 @@ public:
     float DeltaTime() const { return m_delta_time; }
     double GetTime() const { return m_engine_time_milliseconds; }
     int GetTimeSeconds() const { return static_cast<int>(floor(m_engine_time_milliseconds / 1000)); }
+    
+    std::string GetRootPath() { return m_root_path; }
 };
